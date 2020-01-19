@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Comment</key>
+		<string>See this article for details on activating/deactivating Photo Mechanic with Munki: https://www.kevinmcox.com/2020/01/deploying-photo-mechanic-6-with-munki/</string>
+		<key>Description</key>
+		<string>Downloads the latest version of Photo Mechanic 6 and imports it into Munki.</string>
+		<key>Identifier</key>
+		<string>com.github.kevinmcox.munki.PhotoMechanic6</string>
+		<key>Input</key>
+		<dict>
+			<key>LICENSE_NAME</key>
+			<string>Company\ Name,\ Inc.</string>
+			<key>LICENSE_DEPARTMENT</key>
+			<string>Department\ Name</string>
+			<key>LICENSE_KEY</key>
+			<string>XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</string>
+			<key>MUNKI_REPO_SUBDIR</key>
+			<string>apps/PhotoMechanic</string>
+			<key>NAME</key>
+			<string>Photo Mechanic 6</string>
+			<key>pkginfo</key>
+			<dict>
+				<key>catalogs</key>
+				<array>
+					<string>testing</string>
+				</array>
+				<key>category</key>
+				<string>Photography</string>
+				<key>description</key>
+				<string>Photo Mechanic’s super fast browsing enables you to quickly Ingest, Edit and Export, taking the work out of your workflow. Its powerful batch processing, full support for image variables, IPTC and Exif metadata, make it the perfect tool for any digital photographer.</string>
+				<key>developer</key>
+				<string>Camera Bits, Inc.</string>
+				<key>display_name</key>
+				<string>Photo Mechanic 6</string>
+				<key>icon_name</key>
+				<string>%NAME%.png</string>
+				<key>name</key>
+				<string>%NAME%</string>
+				<key>postinstall_script</key>
+				<string>#!/bin/bash
+
+if "/Applications/Photo Mechanic 6.app/Contents/MacOS/Photo Mechanic 6" --activated
+	then
+		/bin/echo "Photo Mechanic 6 is already activated, no action needed."
+	else
+		/bin/echo "Photo Mechanic 6 is not activated, applying registration."
+		"/Applications/Photo Mechanic 6.app/Contents/MacOS/Photo Mechanic 6" --activate --name=%LICENSE_NAME% --department=%LICENSE_DEPARTMENT% --license=%LICENSE_KEY%
+fi</string>
+				<key>preuninstall_script</key>
+				<string>#!/bin/bash
+
+if "/Applications/Photo Mechanic 6.app/Contents/MacOS/Photo Mechanic 6" --deactivate
+	then
+		/bin/echo "Photo Mechanic 6 has been deactivated."
+	else
+		/bin/echo "There was a problem deactivating Photo Mechanic 6."
+fi</string>
+				<key>unattended_install</key>
+				<true/>
+				<key>unattended_uninstall</key>
+				<true/>
+				<key>uninstallable</key>
+				<true/>
+			</dict>
+		</dict>
+		<key>MinimumVersion</key>
+		<string>1.0.0</string>
+		<key>ParentRecipe</key>
+		<string>com.github.kevinmcox.download.PhotoMechanic6</string>
+		<key>Process</key>
+		<array>
+			<dict>
+				<key>Processor</key>
+				<string>MunkiPkginfoMerger</string>
+				<key>Arguments</key>
+				<dict>
+					<key>additional_pkginfo</key>
+					<dict>
+						<key>version</key>
+						<string>%version%</string>
+					</dict>
+				</dict>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>MunkiImporter</string>
+				<key>Arguments</key>
+				<dict>
+					<key>pkg_path</key>
+					<string>%pathname%</string>
+					<key>repo_subdirectory</key>
+					<string>%MUNKI_REPO_SUBDIR%</string>
+					<key>version_comparison_key</key>
+					<string>CFBundleShortVersionString</string>
+				</dict>
+			</dict>
+		</array>
+	</dict>
+</plist>

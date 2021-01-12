@@ -5,7 +5,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Camera Bits, Inc.
 * Photo Mechanic 5
 * [Photo Mechanic 6](https://home.camerabits.com/tour-photo-mechanic/)
-* Photo Mechanic Plus (public beta)
+* [Photo Mechanic Plus](https://home.camerabits.com/tour-photo-mechanic-plus/)
 
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)

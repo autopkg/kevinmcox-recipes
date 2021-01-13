@@ -13,5 +13,8 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Mothers Ruin Software
 * [Apparency](https://mothersruin.com/software/Apparency/)
 
-### Yuji Tachikawa
+### Serhiy Mytrovtsiy (exelban)
+* [Stats](https://github.com/exelban/stats/)
+
+### Yuji Tachikawa (yujitach)
 * [MenuMeters](https://member.ipmu.jp/yuji.tachikawa/MenuMetersElCapitan/)

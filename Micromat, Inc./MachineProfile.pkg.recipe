@@ -8,8 +8,6 @@
 	<string>com.github.kevinmcox.pkg.MachineProfile</string>
 	<key>Input</key>
 	<dict>
-		<key>BUNDLE_ID</key>
-		<string>com.micromat.machineprofile</string>
 		<key>NAME</key>
 		<string>MachineProfile</string>
 	</dict>

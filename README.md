@@ -10,6 +10,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 
+### Mimestream
+* [Mimestream](https://mimestream.com)
+
 ### Mothers Ruin Software
 * [Apparency](https://mothersruin.com/software/Apparency/)
 

@@ -19,6 +19,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Mothers Ruin Software
 * [Apparency](https://mothersruin.com/software/Apparency/)
 
+### Rafael Conde
+* [HiDock](https://hidock.app)
+
 ### Serhiy Mytrovtsiy (exelban)
 * [Stats](https://github.com/exelban/stats/)
 

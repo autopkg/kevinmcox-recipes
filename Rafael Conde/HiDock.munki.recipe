@@ -23,7 +23,7 @@
 				<key>category</key>
 				<string>%MUNKI_CATEGORY%</string>
 				<key>description</key>
-				<string>Set custom Dock settings for when on different displays.</string>
+				<string>HiDock is an app that lets you set different Dock settings for different display configurations.</string>
 				<key>developer</key>
 				<string>Rafael Conde</string>
 				<key>display_name</key>

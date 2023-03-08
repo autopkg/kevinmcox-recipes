@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Description</key>
+		<string>Downloads the latest version of DFU Blaster and imports it into Munki.</string>
+		<key>Identifier</key>
+		<string>com.github.kevinmcox.munki.DFUBlaster</string>
+		<key>Input</key>
+		<dict>
+			<key>NAME</key>
+			<string>DFUBlaster</string>
+			<key>MUNKI_REPO_SUBDIR</key>
+			<string>utilities/DFUBlaster</string>
+			<key>pkginfo</key>
+			<dict>
+				<key>catalogs</key>
+				<array>
+					<string>testing</string>
+				</array>
+				<key>category</key>
+				<string>Utilities</string>
+				<key>description</key>
+				<string>DFU Blaster is the easiest way to put a Mac into DFU mode.</string>
+				<key>developer</key>
+				<string>Twocanoes Software</string>
+				<key>display_name</key>
+				<string>DFU Blaster</string>
+				<key>icon_name</key>
+				<string>DFUBlaster.png</string>
+				<key>name</key>
+				<string>%NAME%</string>
+				<key>unattended_install</key>
+				<true/>
+				<key>unattended_uninstall</key>
+				<true/>
+				<key>uninstall_method</key>
+				<string>uninstall_script</string>
+				<key>uninstall_script</key>
+				<string>#!/bin/sh
+# Uninstall script adapted from DFU Blaster Uninstall package
+if [ -d "/Applications/DFU Blaster.app" ] ; then
+	echo "Removing DFU Blaster.app"
+	rm -rf "/Applications/DFU Blaster.app"
+fi
+
+if [ -e "/Library/LaunchDaemons/com.twocanoes.dfublasterhelper.plist" ] ; then
+	echo "Removing DFU Blaster Helper LaunchDaemon"
+	cd "/Library/LaunchDaemons"
+	launchctl stop com.twocanoes.dfublasterhelper
+	launchctl unload com.twocanoes.dfublasterhelper.plist
+	rm com.twocanoes.dfublasterhelper.plist
+	echo "Done removing DFU Blaster Helper LaunchDaemon"
+fi
+
+if [ -e "/Library/PrivilegedHelperTools/com.twocanoes.dfublasterhelper" ] ; then
+	echo "Removing DFU Blaster Helper Tool"
+	rm "/Library/PrivilegedHelperTools/com.twocanoes.dfublasterhelper"
+	echo "Done removing DFU Blaster Helper Tool"
+fi</string>
+			</dict>
+		</dict>
+		<key>MinimumVersion</key>
+		<string>2.7.2</string>
+		<key>ParentRecipe</key>
+		<string>com.github.kevinmcox.download.DFUBlaster</string>
+		<key>Process</key>
+		<array>
+			<dict>
+				<key>Processor</key>
+				<string>FlatPkgUnpacker</string>
+				<key>Arguments</key>
+				<dict>
+					<key>destination_path</key>
+					<string>%RECIPE_CACHE_DIR%/unpack</string>
+					<key>flat_pkg_path</key>
+					<string>%pathname%/DFU Blaster.pkg</string>
+					<key>purge_destination</key>
+					<true/>
+				</dict>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>PkgPayloadUnpacker</string>
+				<key>Arguments</key>
+				<dict>
+					<key>destination_path</key>
+					<string>%RECIPE_CACHE_DIR%/payload/</string>
+					<key>pkg_payload_path</key>
+					<string>%RECIPE_CACHE_DIR%/unpack/DFU_Blaster.pkg/payload</string>
+					<key>purge_destination</key>
+					<true/>
+				</dict>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>MunkiInstallsItemsCreator</string>
+				<key>Arguments</key>
+				<dict>
+					<key>derive_minimum_os_version</key>
+					<true/>
+					<key>faux_root</key>
+					<string>%RECIPE_CACHE_DIR%/payload</string>
+					<key>installs_item_paths</key>
+					<array>
+						<string>/Applications/DFU Blaster.app</string>
+					</array>
+				</dict>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>MunkiPkginfoMerger</string>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>FileMover</string>
+				<key>Arguments</key>
+				<dict>
+					<key>source</key>
+					<string>%pathname%</string>
+					<key>target</key>
+					<string>DFU_Blaster.dmg</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>MunkiImporter</string>
+				<key>Arguments</key>
+				<dict>
+					<key>pkg_path</key>
+					<string>DFU_Blaster.dmg</string>
+					<key>repo_subdirectory</key>
+					<string>%MUNKI_REPO_SUBDIR%</string>
+				</dict>
+			</dict>
+		</array>
+	</dict>
+</plist>

@@ -119,7 +119,7 @@ fi</string>
 					<key>source</key>
 					<string>%pathname%</string>
 					<key>target</key>
-					<string>DFU_Blaster.dmg</string>
+					<string>%RECIPE_CACHE_DIR%/DFU_Blaster.dmg</string>
 				</dict>
 			</dict>
 			<dict>
@@ -128,7 +128,7 @@ fi</string>
 				<key>Arguments</key>
 				<dict>
 					<key>pkg_path</key>
-					<string>DFU_Blaster.dmg</string>
+					<string>%RECIPE_CACHE_DIR%/DFU_Blaster.dmg</string>
 					<key>repo_subdirectory</key>
 					<string>%MUNKI_REPO_SUBDIR%</string>
 				</dict>

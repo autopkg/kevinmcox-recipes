@@ -17,6 +17,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Mimestream](https://mimestream.com)
 
 ### Mothers Ruin Software
+* [Archaeology](https://www.mothersruin.com/software/Archaeology/)
 * [Apparency](https://mothersruin.com/software/Apparency/)
 
 ### Rafael Conde

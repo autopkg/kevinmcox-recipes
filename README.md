@@ -13,6 +13,11 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Google
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)
 
+### Gravitational Inc.
+* [Teleport](https://goteleport.com)
+* [Teleport Connect](https://goteleport.com)
+* [tsh](https://goteleport.com)
+
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 

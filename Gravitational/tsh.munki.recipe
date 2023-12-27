@@ -34,6 +34,11 @@
 			<string>13.0</string>
 			<key>name</key>
 			<string>%NAME%</string>
+			<key>postuninstall_script</key>
+			<string>#!/bin/sh
+if	[ -L /usr/local/bin/tsh ]; then
+	/bin/rm -f /usr/local/bin/tsh
+fi</string>
 			<key>unattended_install</key>
 			<true/>
 			<key>unattended_uninstall</key>

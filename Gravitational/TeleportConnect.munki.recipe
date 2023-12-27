@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest release, of the specified major version, of Teleport Connect and imports into Munki.</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.munki.Teleport.Connect</string>
+	<key>Input</key>
+	<dict>
+		<key>MAJOR_VERSION</key>
+		<string>14</string>
+		<key>NAME</key>
+		<string>TeleportConnect</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>development/Teleport</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Development</string>
+			<key>description</key>
+			<string>The Teleport Connect app provides all the same access to resources as tsh in a friendly graphic user interface.</string>
+			<key>developer</key>
+			<string>Gravitational Inc.</string>
+			<key>display_name</key>
+			<string>Teleport Connect</string>
+			<key>icon_name</key>
+			<string>Teleport.png</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.7.2</string>
+	<key>ParentRecipe</key>
+	<string>com.github.kevinmcox.download.Teleport.Connect</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

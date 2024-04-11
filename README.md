@@ -28,6 +28,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Archaeology](https://www.mothersruin.com/software/Archaeology/)
 * [Apparency](https://mothersruin.com/software/Apparency/)
 
+### Okta
+* [okta-aws-cli](https://github.com/okta/okta-aws-cli)
+
 ### Rafael Conde
 * [HiDock](https://hidock.app)
 

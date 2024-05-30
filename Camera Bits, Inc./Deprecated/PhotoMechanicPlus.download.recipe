@@ -3,18 +3,36 @@
 <plist version="1.0">
 	<dict>
 		<key>Description</key>
-		<string>Downloads the latest version of Photo Mechanic 6.</string>
+		<string>Downloads the latest version of Photo Mechanic Plus.</string>
 		<key>Identifier</key>
-		<string>com.github.kevinmcox.download.PhotoMechanic6</string>
+		<string>com.github.kevinmcox.download.PhotoMechanicPlus</string>
 		<key>Input</key>
 		<dict>
 			<key>NAME</key>
-			<string>Photo Mechanic 6</string>
+			<string>Photo Mechanic Plus</string>
 		</dict>
 		<key>MinimumVersion</key>
 		<string>1.0.0</string>
 		<key>Process</key>
 		<array>
+			<dict>
+				<key>Processor</key>
+				<string>DeprecationWarning</string>
+				<key>Arguments</key>
+				<dict>
+					<key>warning_message</key>
+					<string>Photo Mechanic downloads are now consolidated into a single app. This recipe has been replaced at: https://github.com/autopkg/kevinmcox-recipes/tree/master/Camera%20Bits%2C%20Inc.</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>StopProcessingIf</string>
+				<key>Arguments</key>
+				<dict>
+					<key>predicate</key>
+					<string>TRUEPREDICATE</string>
+				</dict>
+			</dict>
 			<dict>
 				<key>Processor</key>
 				<string>URLTextSearcher</string>
@@ -25,7 +43,7 @@
 					<key>result_output_var_name</key>
 					<string>build</string>
 					<key>url</key>
-					<string>https://www.camerabits.com/cgi-bin/download_pm.cgi?plat=mac&amp;version=PRO</string>
+					<string>https://www.camerabits.com/cgi-bin/download_pm.cgi?plat=mac&amp;version=PLUS</string>
 				</dict>
 			</dict>
 			<dict>
@@ -34,9 +52,9 @@
 				<key>Arguments</key>
 				<dict>
 					<key>url</key>
-					<string>https://www.camerabits.com/download/PhotoMechanic6R%build%.dmg</string>
+					<string>https://www.camerabits.com/download/PhotoMechanicPlusR%build%.dmg</string>
 					<key>filename</key>
-					<string>PhotoMechanic6.dmg</string>
+					<string>PhotoMechanicPlus.dmg</string>
 				</dict>
 			</dict>
 			<dict>
@@ -49,7 +67,7 @@
 				<key>Arguments</key>
 				<dict>
 					<key>input_path</key>
-					<string>%pathname%/Photo Mechanic 6.app</string>
+					<string>%pathname%/Photo Mechanic Plus.app</string>
 					<key>requirement</key>
 					<string>identifier "com.camerabits.PhotoMechanic" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "628DA53678"</string>
 				</dict>
@@ -60,7 +78,7 @@
 				<key>Arguments</key>
 				<dict>
 					<key>input_plist_path</key>
-					<string>%pathname%/Photo Mechanic 6.app/Contents/Info.plist</string>
+					<string>%pathname%/Photo Mechanic Plus.app/Contents/Info.plist</string>
 					<key>plist_version_key</key>
 					<string>CFBundleShortVersionString</string>
 				</dict>

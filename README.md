@@ -6,9 +6,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [MDM Watchdog](https://addigy.com/mdm-watchdog/)
 
 ### Camera Bits, Inc.
-* Photo Mechanic 5
-* [Photo Mechanic 6](https://home.camerabits.com/tour-photo-mechanic/)
-* [Photo Mechanic Plus](https://home.camerabits.com/tour-photo-mechanic-plus/)
+* [Photo Mechanic](https://www.camerabits.com)
 
 ### Google
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)

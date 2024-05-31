@@ -3,7 +3,7 @@
 <plist version="1.0">
 	<dict>
 		<key>Comment</key>
-		<string>See this article for details on activating/deactivating Photo Mechanic with Munki: https://www.kevinmcox.com/2020/01/deploying-photo-mechanic-6-with-munki/</string>
+		<string>See this article for details on activating/deactivating Photo Mechanic with Munki: https://www.kevinmcox.com/2024/05/deploying-photo-mechanic-with-munki/</string>
 		<key>Description</key>
 		<string>Downloads the latest version of Photo Mechanic and imports it into Munki.</string>
 		<key>Identifier</key>

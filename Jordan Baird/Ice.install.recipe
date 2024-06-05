@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Installs the latest version of the Ice menu bar manager.</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.install.Ice</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>Ice</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.0.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.kevinmcox.download.Ice</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>FileMover</string>
+			<key>Arguments</key>
+			<dict>
+				<key>source</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%/Ice.app</string>
+				<key>target</key>
+				<string>/Applications/Ice.app</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

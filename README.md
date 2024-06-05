@@ -16,6 +16,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Teleport Connect](https://goteleport.com)
 * [tsh](https://goteleport.com)
 
+### Jordan Baird
+* [Ice](https://github.com/jordanbaird/Ice) menu bar manager
+
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 

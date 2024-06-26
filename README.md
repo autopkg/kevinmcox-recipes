@@ -8,6 +8,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Camera Bits, Inc.
 * [Photo Mechanic](https://www.camerabits.com)
 
+### Dizzion, Inc. (Nutanix)
+* [Frame](https://www.dizzion.com)
+
 ### Google
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)
 

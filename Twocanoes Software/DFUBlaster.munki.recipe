@@ -113,26 +113,27 @@ fi</string>
 			</dict>
 			<dict>
 				<key>Processor</key>
-				<string>FileMover</string>
-				<key>Arguments</key>
-				<dict>
-					<key>source</key>
-					<string>%pathname%</string>
-					<key>target</key>
-					<string>%RECIPE_CACHE_DIR%/DFU_Blaster.dmg</string>
-				</dict>
-			</dict>
-			<dict>
-				<key>Processor</key>
 				<string>MunkiImporter</string>
 				<key>Arguments</key>
 				<dict>
 					<key>pkg_path</key>
-					<string>%RECIPE_CACHE_DIR%/DFU_Blaster.dmg</string>
+					<string>%pathname%</string>
 					<key>repo_subdirectory</key>
 					<string>%MUNKI_REPO_SUBDIR%</string>
 				</dict>
 			</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/payload/</string>
+					<string>%RECIPE_CACHE_DIR%/unpack</string>
+				</array>
+			</dict>
+		</dict>
 		</array>
 	</dict>
 </plist>

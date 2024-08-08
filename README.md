@@ -8,6 +8,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Camera Bits, Inc.
 * [Photo Mechanic](https://www.camerabits.com)
 
+### DEVONtechnologies
+* [Neo Network Utility](https://www.devontechnologies.com/blog/20240711-network-utility-10)
+
 ### Dizzion, Inc. (Nutanix)
 * [Frame](https://www.dizzion.com)
 

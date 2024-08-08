@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest version of Neo Network Utility and imports it into Munki.</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.munki.NeoNetworkUtility</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>NeoNetworkUtility</string>
+		<key>repo_subdirectory</key>
+		<string>utilities</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Utilities</string>
+			<key>description</key>
+			<string>Neo Network Utility has a full range of networking tools for retrieving information about your network adapter and diagnose common network problems.
+			
+All similarities with an application of the same name that was once bundled with legacy versions of Mac OS X and OSX are, of course, purely coincidental.</string>
+			<key>developer</key>
+			<string>DEVONtechnologies</string>
+			<key>display_name</key>
+			<string>Neo Network Utility</string>
+			<key>icon_name</key>
+			<string>NeoNetworkUtility.png</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+			<key>uninstallable</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.0.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.kevinmcox.download.NeoNetworkUtility</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/unarchived/*.dmg</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%found_filename%</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -34,30 +34,6 @@
 				<true/>
 				<key>unattended_uninstall</key>
 				<true/>
-				<key>uninstall_method</key>
-				<string>uninstall_script</string>
-				<key>uninstall_script</key>
-				<string>#!/bin/sh
-# Uninstall script adapted from DFU Blaster Uninstall package
-if [ -d "/Applications/DFU Blaster.app" ] ; then
-	echo "Removing DFU Blaster.app"
-	rm -rf "/Applications/DFU Blaster.app"
-fi
-
-if [ -e "/Library/LaunchDaemons/com.twocanoes.dfublasterhelper.plist" ] ; then
-	echo "Removing DFU Blaster Helper LaunchDaemon"
-	cd "/Library/LaunchDaemons"
-	launchctl stop com.twocanoes.dfublasterhelper
-	launchctl unload com.twocanoes.dfublasterhelper.plist
-	rm com.twocanoes.dfublasterhelper.plist
-	echo "Done removing DFU Blaster Helper LaunchDaemon"
-fi
-
-if [ -e "/Library/PrivilegedHelperTools/com.twocanoes.dfublasterhelper" ] ; then
-	echo "Removing DFU Blaster Helper Tool"
-	rm "/Library/PrivilegedHelperTools/com.twocanoes.dfublasterhelper"
-	echo "Done removing DFU Blaster Helper Tool"
-fi</string>
 			</dict>
 		</dict>
 		<key>MinimumVersion</key>
@@ -74,7 +50,7 @@ fi</string>
 					<key>destination_path</key>
 					<string>%RECIPE_CACHE_DIR%/unpack</string>
 					<key>flat_pkg_path</key>
-					<string>%pathname%/DFU Blaster.pkg</string>
+					<string>%pathname%/DFU Blaster Pro.pkg</string>
 					<key>purge_destination</key>
 					<true/>
 				</dict>
@@ -87,7 +63,7 @@ fi</string>
 					<key>destination_path</key>
 					<string>%RECIPE_CACHE_DIR%/payload/</string>
 					<key>pkg_payload_path</key>
-					<string>%RECIPE_CACHE_DIR%/unpack/DFU_Blaster.pkg/payload</string>
+					<string>%RECIPE_CACHE_DIR%/unpack/DFU_Blaster_Pro.pkg/payload</string>
 					<key>purge_destination</key>
 					<true/>
 				</dict>
@@ -103,7 +79,7 @@ fi</string>
 					<string>%RECIPE_CACHE_DIR%/payload</string>
 					<key>installs_item_paths</key>
 					<array>
-						<string>/Applications/DFU Blaster.app</string>
+						<string>/Applications/DFU Blaster Pro.app</string>
 					</array>
 				</dict>
 			</dict>

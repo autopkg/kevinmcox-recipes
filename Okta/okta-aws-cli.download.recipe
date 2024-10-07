@@ -4,7 +4,7 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest version of okta-aws-cli (https://github.com/okta/okta-aws-cli).
-	Set ARCH to either "arm" (default) for Apple Silicon or "amd" for Intel.</string>
+	Set ARCH to either "arm64" (default) for Apple Silicon or "amd64" for Intel.</string>
 	<key>Identifier</key>
 	<string>com.github.kevinmcox.download.okta-aws-cli</string>
 	<key>Input</key>
@@ -12,10 +12,10 @@
 		<key>NAME</key>
 		<string>okta-aws-cli</string>
 		<key>ARCH</key>
-		<string>arm</string>
+		<string>arm64</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.0.0</string>
+	<string>2.7.3</string>
 	<key>Process</key>
 	<array>
 		<dict>
@@ -24,7 +24,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>asset_regex</key>
-				<string>.*darwin_%ARCH%64\.tar\.gz$</string>
+				<string>.*darwin_%ARCH%\.tar\.gz$</string>
 				<key>github_repo</key>
 				<string>okta/okta-aws-cli</string>
 			</dict>

@@ -4,7 +4,7 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest version of okta-aws-cli (https://github.com/okta/okta-aws-cli) and packages it.
-	Set ARCH to either "arm" (default) for Apple Silicon or "amd" for Intel.</string>
+	Set ARCH to either "arm64" (default) for Apple Silicon or "amd64" for Intel.</string>
 	<key>Identifier</key>
 	<string>com.github.kevinmcox.pkg.okta-aws-cli</string>
 	<key>Input</key>
@@ -12,10 +12,10 @@
 		<key>NAME</key>
 		<string>okta-aws-cli</string>
 		<key>ARCH</key>
-		<string>arm</string>
+		<string>arm64</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>2.7.2</string>
+	<string>2.7.3</string>
 	<key>ParentRecipe</key>
 	<string>com.github.kevinmcox.download.okta-aws-cli</string>
 	<key>Process</key>

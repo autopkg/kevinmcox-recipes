@@ -4,7 +4,7 @@
 <dict>
 	<key>Description</key>
 	<string>Downloads the latest version of okta-aws-cli (https://github.com/okta/okta-aws-cli), packages it and imports it into Munki.
-	Set ARCH to either "arm" (default) for Apple Silicon or "amd" for Intel.</string>
+	Set ARCH to either "arm64" (default) for Apple Silicon or "amd64" for Intel.</string>
 	<key>Identifier</key>
 	<string>com.github.kevinmcox.munki.okta-aws-cli</string>
 	<key>Input</key>
@@ -12,7 +12,7 @@
 		<key>NAME</key>
 		<string>okta-aws-cli</string>
 		<key>ARCH</key>
-		<string>arm</string>
+		<string>arm64</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>utilities</string>
 		<key>pkginfo</key>
@@ -48,11 +48,38 @@
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>2.7.2</string>
+	<string>2.7.3</string>
 	<key>ParentRecipe</key>
 	<string>com.github.kevinmcox.pkg.okta-aws-cli</string>
 	<key>Process</key>
 	<array>
+		<dict>
+			<key>Processor</key>
+			<string>com.github.homebysix.FindAndReplace/FindAndReplace</string>
+			<key>Arguments</key>
+			<dict>
+				<key>find</key>
+				<string>amd64</string>
+				<key>input_string</key>
+				<string>%ARCH%</string>
+				<key>replace</key>
+				<string>x86_64</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>supported_architectures</key>
+					<array>
+						<string>%output_string%</string>
+					</array>
+				</dict>
+			</dict>
+		</dict>
 		<dict>
 			<key>Processor</key>
 			<string>MunkiInstallsItemsCreator</string>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest universal version of Slack in package form.</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.download.Slack-pkg</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>Slack</string>
+		<key>PKG_URL</key>
+		<string>https://slack.com/ssb/download-osx-universal-pkg</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.7.2</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+			<key>Arguments</key>
+			<dict>
+				<key>filename</key>
+				<string>Slack.pkg</string>
+				<key>url</key>
+				<string>%PKG_URL%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>CodeSignatureVerifier</string>
+			<key>Arguments</key>
+			<dict>
+				<key>expected_authority_names</key>
+				<array>
+					<string>Developer ID Installer: Slack Technologies, Inc. (BQR82RBBHL)</string>
+					<string>Developer ID Certification Authority</string>
+					<string>Apple Root CA</string>
+				</array>
+				<key>input_path</key>
+				<string>%pathname%</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

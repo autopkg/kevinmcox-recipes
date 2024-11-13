@@ -44,6 +44,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Serhiy Mytrovtsiy (exelban)
 * [Stats](https://github.com/exelban/stats/)
 
+### Slack
+* [Slack](https://slack.com)
+
 ### Twocanoes Software
 * [DFU Blaster](https://www.kevinmcox.com/2023/02/dfu-blaster-an-even-easier-method-to-put-a-macbook-into-dfu-mode/)
 

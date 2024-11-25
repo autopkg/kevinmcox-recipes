@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest version of websocat (https://github.com/vi/websocat) and packages it.
+	Set ARCH to either "aarch64" (default) for Apple Silicon or "x86_64" for Intel.</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.pkg.websocat</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>websocot</string>
+		<key>ARCH</key>
+		<string>aarch64</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.7.3</string>
+	<key>ParentRecipe</key>
+	<string>com.github.kevinmcox.download.websocat</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>PkgRootCreator</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkgroot</key>
+				<string>%RECIPE_CACHE_DIR%/pkg_root</string>
+				<key>pkgdirs</key>
+				<dict>
+					<key>usr</key>
+					<string>0755</string>
+					<key>usr/local</key>
+					<string>0755</string>
+					<key>usr/local/bin</key>
+					<string>0755</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>Copier</string>
+			<key>Arguments</key>
+			<dict>
+				<key>source_path</key>
+				<string>%RECIPE_CACHE_DIR%/downloads/websocat</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/pkg_root/usr/local/bin/websocat</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PkgCreator</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_request</key>
+				<dict>
+					<key>pkgname</key>
+					<string>%NAME%-%ARCH%-%version%</string>
+					<key>pkgdir</key>
+					<string>%RECIPE_CACHE_DIR%</string>
+					<key>id</key>
+					<string>com.github.vi.websocat</string>
+					<key>options</key>
+					<string>purge_ds_store</string>
+					<key>chown</key>
+					<array>
+						<dict>
+							<key>path</key>
+							<string>usr</string>
+							<key>user</key>
+							<string>root</string>
+							<key>group</key>
+							<string>wheel</string>
+							<key>mode</key>
+							<string>0755</string>
+						</dict>
+					</array>
+				</dict>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

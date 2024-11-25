@@ -50,5 +50,8 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Twocanoes Software
 * [DFU Blaster](https://www.kevinmcox.com/2023/02/dfu-blaster-an-even-easier-method-to-put-a-macbook-into-dfu-mode/)
 
+### Vitaly Shukela
+* [websocat](https://github.com/vi/websocat)
+
 ### Yuji Tachikawa (yujitach)
 * [MenuMeters](https://member.ipmu.jp/yuji.tachikawa/MenuMetersElCapitan/)

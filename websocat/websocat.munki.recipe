@@ -12,7 +12,7 @@
 		<key>NAME</key>
 		<string>websocat</string>
 		<key>ARCH</key>
-		<string>x86_64</string>
+		<string>aarch64</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>utilities</string>
 		<key>pkginfo</key>

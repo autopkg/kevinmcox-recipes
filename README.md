@@ -25,6 +25,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Jordan Baird
 * [Ice](https://github.com/jordanbaird/Ice) menu bar manager
 
+### Kreya
+* [Kreya](https://kreya.app)
+
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 

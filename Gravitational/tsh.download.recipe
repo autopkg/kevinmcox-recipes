@@ -3,13 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest release, of the specified major version, of the Teleport tsh client.</string>
+	<string>Downloads the latest release, of the specified major version, of the Teleport tsh client.
+	NOTE: 16.x is the last version of a standalone TSH app. Switch to Teleport for version 17.</string>
 	<key>Identifier</key>
 	<string>com.github.kevinmcox.download.Teleport.tsh</string>
 	<key>Input</key>
 	<dict>
 		<key>MAJOR_VERSION</key>
-		<string>14</string>
+		<string>16</string>
 		<key>NAME</key>
 		<string>Teleport-tsh</string>
 	</dict>

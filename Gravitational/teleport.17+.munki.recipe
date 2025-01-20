@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest release of the specified major version of Teleport 16 or lower and imports into Munki.
-	NOTE: For Teleport version 17 and higher switch to: com.github.kevinmcox.munki.Teleport.17+</string>
+	<string>Downloads the latest release of the specified major version of Teleport 17 or higher and imports into Munki.
+	NOTE: For Teleport 16 and lower use: com.github.kevinmcox.munki.Teleport</string>
 	<key>Identifier</key>
-	<string>com.github.kevinmcox.munki.Teleport</string>
+	<string>com.github.kevinmcox.munki.Teleport.17+</string>
 	<key>Input</key>
 	<dict>
 		<key>MAJOR_VERSION</key>
-		<string>16</string>
+		<string>17</string>
 		<key>NAME</key>
 		<string>Teleport</string>
 		<key>MUNKI_REPO_SUBDIR</key>
@@ -68,9 +68,35 @@
 				<key>destination_path</key>
 				<string>%RECIPE_CACHE_DIR%/payload/usr/local/bin/</string>
 				<key>pkg_payload_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack/Payload</string>
+				<string>%RECIPE_CACHE_DIR%/unpack/teleport-bin-%VERSION%.pkg/Payload</string>
 				<key>purge_destination</key>
 				<true/>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PkgPayloadUnpacker</string>
+			<key>Arguments</key>
+			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/payload/Applications/</string>
+				<key>pkg_payload_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpack/tctl-%VERSION%.pkg/Payload</string>
+				<key>purge_destination</key>
+				<true/>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PkgPayloadUnpacker</string>
+			<key>Arguments</key>
+			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/payload/Applications/</string>
+				<key>pkg_payload_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpack/tsh-%VERSION%.pkg/Payload</string>
+				<key>purge_destination</key>
+				<false/>
 			</dict>
 		</dict>
 		<dict>
@@ -82,10 +108,11 @@
 				<string>%RECIPE_CACHE_DIR%/payload</string>
 				<key>installs_item_paths</key>
 				<array>
+					<string>/Applications/tctl.app</string>
+					<string>/Applications/tsh.app</string>
+					<string>/usr/local/bin/fdpass-teleport</string>
 					<string>/usr/local/bin/tbot</string>
-					<string>/usr/local/bin/tctl</string>
 					<string>/usr/local/bin/teleport</string>
-					<string>/usr/local/bin/tsh</string>
 				</array>
 			</dict>
 		</dict>

@@ -81,6 +81,8 @@
 					<array>
 						<string>/Applications/DFU Blaster Pro.app</string>
 					</array>
+					<key>version_comparison_key</key>
+					<string>CFBundleVersion</string>
 				</dict>
 			</dict>
 			<dict>

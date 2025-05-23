@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads latest Android Studio IDE from Google and imports into Munki.
+
+	For Apple Silicon set ARCH to "arm64" (default) and for Intel set ARCH to "x86_64".
+
+	NOTE: This recipe differs from others in that it allows for the import and distribution of "patch" versions (not just major/minor) of Android Studio. It also allows for a single architecture variable to be used for both the download and Munki.
+	</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.munki.AndroidStudio</string>
+	<key>Input</key>
+	<dict>
+		<key>ARCH</key>
+		<string>arm64</string>
+		<key>NAME</key>
+		<string>AndroidStudio</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%/%ARCH%</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Development</string>
+			<key>description</key>
+			<string>Android Studio is the official IDE for Android application development, based on IntelliJ IDEA.</string>
+			<key>developer</key>
+			<string>Google</string>
+			<key>display_name</key>
+			<string>Android Studio</string>
+			<key>icon_name</key>
+			<string>%NAME%.png</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>supported_architectures</key>
+			<array>
+				<string>%ARCH%</string>
+			</array>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.7.4</string>
+	<key>ParentRecipe</key>
+	<string>com.github.kevinmcox.download.AndroidStudio</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -15,6 +15,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Frame](https://www.dizzion.com)
 
 ### Google
+* [Android Studio](https://developer.android.com/studio)
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)
 
 ### Gravitational Inc.

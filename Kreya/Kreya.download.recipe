@@ -18,13 +18,24 @@
 	<string>2.7.0</string>
 	<key>Process</key>
 	<array>
+			<dict>
+				<key>Processor</key>
+				<string>URLTextSearcher</string>
+				<key>Arguments</key>
+				<dict>
+					<key>re_pattern</key>
+					<string>https://stable-downloads\.kreya\.app/\d+\.\d+\.\d+/Kreya-osx-%ARCH%\.zip</string>
+					<key>url</key>
+					<string>https://kreya.app/downloads/</string>
+				</dict>
+			</dict>
 		<dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
 			<key>Arguments</key>
 			<dict>
 				<key>url</key>
-				<string>https://stable-downloads.kreya.app/Kreya-osx-%ARCH%.zip</string>
+				<string>%match%</string>
 			</dict>
 		</dict>
 		<dict>

@@ -8,6 +8,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Camera Bits, Inc.
 * [Photo Mechanic](https://www.camerabits.com)
 
+### Cirrus Labs
+* [Tart](https://tart.run)
+
 ### DEVONtechnologies
 * [Neo Network Utility](https://www.devontechnologies.com/blog/20240711-network-utility-10)
 

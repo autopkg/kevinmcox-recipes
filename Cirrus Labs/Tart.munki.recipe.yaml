@@ -1,0 +1,43 @@
+Description: Downloads the latest version of Tart and imports it into Munki. Code Signature Verification is disabled due to broken code signing by the developer.
+Identifier: com.github.kevinmcox.munki.Tart
+ParentRecipe: com.github.kevinmcox.pkg.Tart
+MinimumVersion: '2.7'
+
+Input:
+  NAME: Tart
+  DISABLE_CODE_SIGNATURE_VERIFICATION: true
+  MUNKI_CATEGORY: Virtualization
+  MUNKI_REPO_SUBDIR: cli-tools/tart
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: macOS VMs on Apple Silicon to use in CI and other automations.
+    developer: Cirrus Labs
+    display_name: Tart
+    icon_name: Tart.png
+    minimum_os_version: '12.0'
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /Library/Application Support/Tart/tart.app
+        - /usr/local/bin/tart
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

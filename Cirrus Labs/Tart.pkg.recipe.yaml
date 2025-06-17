@@ -1,0 +1,55 @@
+Description: Downloads the latest version of Tart from Github and builds a package. Code Signature Verification is disabled due to broken code signing by the developer.
+Identifier: com.github.kevinmcox.pkg.Tart
+ParentRecipe: com.github.kevinmcox.download.Tart
+MinimumVersion: '2.7'
+
+Input:
+  NAME: Tart
+  DISABLE_CODE_SIGNATURE_VERIFICATION: true
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        Library: "0755"
+        Library/Application Support: "0755"
+        Library/Application Support/Tart: "0755"
+        usr: "0755"
+        usr/local: "0755"
+        usr/local/bin: "0755"
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%RECIPE_CACHE_DIR%/unpack/"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/Library/Application Support/Tart/"
+      overwrite: true
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/bin/tart"
+      file_mode: "0755"
+      file_content: |
+        #!/bin/sh
+        exec '/Library/Application Support/Tart/tart.app/Contents/MacOS/tart' "$@"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgname: "%NAME%-%version%"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        id: com.github.cirruslabs.tart-app
+        options: purge_ds_store
+        version: "%version%"
+        chown:
+          - path: Library
+            user: root
+            group: wheel
+          - path: usr
+            user: root
+            group: wheel
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/unpack"

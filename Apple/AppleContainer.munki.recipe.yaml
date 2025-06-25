@@ -1,0 +1,103 @@
+Description: Downloads the latest release of Apple's Container (https://github.com/apple/container) and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.AppleContainer
+ParentRecipe: com.github.kevinmcox.download.AppleContainer
+MinimumVersion: 2.7.4
+
+Input:
+  NAME: AppleContainer
+  MUNKI_REPO_SUBDIR: Apple/Container
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: Container is a tool that you can use to create and run Linux containers as lightweight virtual machines on your Mac. It's written in Swift, and optimized for Apple silicon.
+    developer: Apple, Inc.
+    display_name: Container
+    icon_name: '%NAME%.png'
+    minimum_os_version: '15.5'
+    name: '%NAME%'
+    supported_architectures:
+      - arm64
+    postuninstall_script: |
+      #!/bin/bash
+
+      # This deletes the user's container data.
+      # Remove this script from your override if you want to leave the data on disk
+
+      lastUser=$(/usr/bin/defaults read /Library/Preferences/com.apple.loginwindow.plist lastUserName)
+      userHome=$(/usr/bin/dscl . -read /Users/"${lastUser}" NFSHomeDirectory | /usr/bin/awk '{print $2}')
+      if [[ -d "${userHome}/Library/Application Support/com.apple.container" ]]; then
+        echo "Removing 'container' user data"
+        /bin/rm -rf "${userHome}/Library/Application Support/com.apple.container"
+      fi
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/unpack'
+      flat_pkg_path: '%pathname%'
+      purge_destination: true
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/payload/usr/local'
+      pkg_payload_path: '%RECIPE_CACHE_DIR%/unpack/Payload'
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/payload'
+      installs_item_paths:
+        - /usr/local/bin/container
+        - /usr/local/bin/container-apiserver
+        - /usr/local/libexec/container/plugins/container-core-images/bin/container-core-images
+        - /usr/local/libexec/container/plugins/container-network-vmnet/bin/container-network-vmnet
+        - /usr/local/libexec/container/plugins/container-runtime-linux/bin/container-runtime-linux
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        preuninstall_script: |
+          #!/bin/bash
+
+          currentUser=$( echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ { print $3 }' )
+          if [[ "${currentUser}" == "root" || -z "${currentUser}" ]]; then
+            echo "No logged-in user session detected; skipping container stop."
+            exit 0
+          fi
+
+          uid=$(/usr/bin/id -u "${currentUser}")
+          CONTAINER_BIN="/usr/local/bin/container"
+          # Attempting to gracefully stop container with 'container system stop'...
+          /bin/launchctl asuser "${uid}" sudo -u "${currentUser}" "${CONTAINER_BIN}" system stop
+          /bin/sleep 2
+
+          # Look for lingering container processes
+          CONTAINER_PIDS=$(/usr/bin/pgrep -f "${CONTAINER_BIN}")
+          if [[ -n "${CONTAINER_PIDS}" ]]; then
+            echo "${CONTAINER_PIDS}"
+            /usr/bin/xargs -n 1 /bin/kill -TERM <<< "${CONTAINER_PIDS}"
+            /bin/sleep 2
+            # One last check
+            if /usr/bin/pgrep -f "${CONTAINER_BIN}" &>/dev/null; then
+              echo "Error: container processes are still running after kill attempt."
+              exit 1
+            fi
+          fi
+        version: '%version%'
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pathname%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/payload/'
+        - '%RECIPE_CACHE_DIR%/unpack'

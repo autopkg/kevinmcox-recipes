@@ -5,6 +5,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Addigy, Inc.
 * [MDM Watchdog](https://addigy.com/mdm-watchdog/)
 
+### Apple, Inc.
+* [Container](https://github.com/apple/container)
+
 ### Camera Bits, Inc.
 * [Photo Mechanic](https://www.camerabits.com)
 

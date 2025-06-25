@@ -1,0 +1,26 @@
+Description: Downloads the latest release of Apple's Container (https://github.com/apple/container).
+Identifier: com.github.kevinmcox.download.AppleContainer
+MinimumVersion: 2.7.4
+
+Input:
+  NAME: AppleContainer
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: ^container-\d+\.\d+\.\d+(?:-.*)?-signed\.pkg$
+      github_repo: apple/container
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: '%NAME%-%version%.pkg'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - 'Developer ID Installer: Apple Inc. - Containerization (UPBK2H6LZM)'
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: '%pathname%'

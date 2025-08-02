@@ -44,7 +44,7 @@
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>2.7.0</string>
+	<string>2.7.6</string>
 	<key>ParentRecipe</key>
 	<string>com.github.kevinmcox.download.Kreya</string>
 	<key>Process</key>
@@ -62,7 +62,7 @@
 		</dict>
 		<dict>
 			<key>Processor</key>
-			<string>com.github.homebysix.FindAndReplace/FindAndReplace</string>
+			<string>FindAndReplace</string>
 			<key>Arguments</key>
 			<dict>
 				<key>input_string</key>
@@ -71,6 +71,8 @@
 				<string>x64</string>
 				<key>replace</key>
 				<string>x86_64</string>
+				<key>result_output_var_name</key>
+				<string>supported_arch</string>
 			</dict>
 		</dict>
 		<dict>
@@ -82,7 +84,7 @@
 				<dict>
 					<key>supported_architectures</key>
 					<array>
-						<string>%output_string%</string>
+						<string>%supported_arch%</string>
 					</array>
 				</dict>
 			</dict>

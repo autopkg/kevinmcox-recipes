@@ -19,12 +19,12 @@
 		<string>AndroidStudio</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>2.7.4</string>
+	<string>2.7.6</string>
 	<key>Process</key>
 	<array>
 		<dict>
 			<key>Processor</key>
-			<string>com.github.homebysix.FindAndReplace/FindAndReplace</string>
+			<string>FindAndReplace</string>
 			<key>Arguments</key>
 			<dict>
 				<key>input_string</key>
@@ -37,7 +37,7 @@
 		</dict>
 		<dict>
 			<key>Processor</key>
-			<string>com.github.homebysix.FindAndReplace/FindAndReplace</string>
+			<string>FindAndReplace</string>
 			<key>Arguments</key>
 			<dict>
 				<key>input_string</key>

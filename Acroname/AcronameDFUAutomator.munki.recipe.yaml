@@ -1,0 +1,57 @@
+Description: Downloads the latest version of Acroname DFU Automator and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.AcronameDFUAutomator
+ParentRecipe: com.github.kevinmcox.download.AcronameDFUAutomator
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: AcronameDFUAutomator
+  MUNKI_CATEGORY: Utilities
+  MUNKI_REPO_SUBDIR: Acroname/DFUAutomator
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: DFU Automator is a small application that enables Apple Shortcuts to control USBHub3c’s DFU functions. DFU Automator operates as a background tool, responding to commands issued by Apple Shortcuts. When combined with Apple Configurator actions, shortcuts can fully automate Mac deployment and provisioning.
+    developer: Acroname
+    display_name: Acroname DFU Automator
+    icon_name: AcronameDFUAutomator.png
+    minimum_os_version: '13.5'
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/faux_root"
+      pkgdirs:
+        Applications: "0755"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%/DFU Automator.app"
+      destination_path: "%RECIPE_CACHE_DIR%/faux_root/Applications/DFU Automator.app"
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/faux_root"
+      installs_item_paths:
+        - /Applications/DFU Automator.app/Contents/MacOS/DFU Automator
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/faux_root"

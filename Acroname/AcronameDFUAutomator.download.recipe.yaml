@@ -1,0 +1,32 @@
+Description: Downloads the latest version of Acroname DFU Automator.
+Identifier: com.github.kevinmcox.download.AcronameDFUAutomator
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: AcronameHubTool
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: DFU_Automator_([0-9.]+)_macx_universal\.dmg
+    result_output_var_name: version
+    url: https://acroname.com/dfu-automator
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: https://acroname\.com/sites/default/files/software/dfu_automator/[0-9.]+/DFU_Automator_[0-9.]+_macx_universal\.dmg
+    result_output_var_name: dmg_link
+    url: https://acroname.com/dfu-automator
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%dmg_link%'
+    filename: DFUAutomator-%version%.dmg
+
+- Processor: EndOfCheckPhase
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    input_path: '%pathname%/DFU Automator.app'
+    requirement: >
+      identifier "acroname.DFU-n-ator" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = QJ9C9GQLWS

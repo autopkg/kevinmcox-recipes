@@ -2,6 +2,10 @@
 
 Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including the following applications:
 
+### Acroname, Inc.
+* [DFU Automator](https://acroname.com/dfu-automator)
+* [HubTool](https://acroname.com/hubtool)
+
 ### Addigy, Inc.
 * [MDM Watchdog](https://addigy.com/mdm-watchdog/)
 
@@ -58,7 +62,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Slack](https://slack.com)
 
 ### Twocanoes Software
-* [DFU Blaster](https://www.kevinmcox.com/2023/02/dfu-blaster-an-even-easier-method-to-put-a-macbook-into-dfu-mode/)
+* [DFU Blaster Pro](https://twocanoes.com/products/mac/dfu-blaster/)
 
 ### Vitaly Shukela
 * [websocat](https://github.com/vi/websocat)

@@ -1,0 +1,34 @@
+Description: Downloads the latest version of Acroname HubTool.
+Identifier: com.github.kevinmcox.download.AcronameHubTool
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: AcronameHubTool
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: HubTool_([0-9.]+)_macx_universal\.dmg
+    result_output_var_name: version
+    url: https://acroname.com/software/hubtool
+
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: https://acroname\.com/sites/default/files/software/hubtool/[0-9.]+/HubTool_[0-9.]+_macx_universal\.dmg
+    result_output_var_name: dmg_link
+    url: https://acroname.com/software/hubtool
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%dmg_link%'
+    filename: HubTool-%version%.dmg
+
+- Processor: EndOfCheckPhase
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    input_path: '%pathname%/HubTool.app'
+    requirement: >
+      identifier "com.acroname.HubTool" and anchor apple generic and certificate
+      1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13]
+      /* exists */ and certificate leaf[subject.OU] = QJ9C9GQLWS

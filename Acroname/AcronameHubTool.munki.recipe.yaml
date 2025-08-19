@@ -1,0 +1,57 @@
+Description: Downloads the latest version of Acroname HubTool and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.AcronameHubTool
+ParentRecipe: com.github.kevinmcox.download.AcronameHubTool
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: AcronameHubTool
+  MUNKI_CATEGORY: Utilities
+  MUNKI_REPO_SUBDIR: Acroname/HubTool
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: HubTool enables users to easily control programmable USB hubs through a graphical user interface (GUI). With its intuitive design and comprehensive features, HubTool simplifies the management of USB devices and enhances the user experience.
+    developer: Acroname
+    display_name: Acroname HubTool
+    icon_name: AcronameHubTool.png
+    minimum_os_version: '10.15'
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/faux_root"
+      pkgdirs:
+        Applications: "0755"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%/HubTool.app"
+      destination_path: "%RECIPE_CACHE_DIR%/faux_root/Applications/HubTool.app"
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/faux_root"
+      installs_item_paths:
+        - /Applications/HubTool.app/Contents/MacOS/HubTool
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/faux_root"

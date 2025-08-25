@@ -1,0 +1,86 @@
+Description: Downloads the latest version of Acroname DFU Automator and imports it into Munki.
+Identifier: com.github.kevinmcox.pkg.AcronameDFUAutomator
+ParentRecipe: com.github.kevinmcox.download.AcronameDFUAutomator
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: AcronameDFUAutomator
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        Applications: "0755"
+        Users/Shared: "0777"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/scripts"
+      pkgdirs: {}
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%/DFU Automator.app"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/Applications/DFU Automator.app"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%/Examples"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/Users/Shared/Acroname"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/scripts/postinstall"
+      file_mode: "0755"
+      file_content: |
+        #!/bin/bash
+
+        # Make sure user is logged in
+        currentUser=$(/usr/sbin/scutil <<< "show State:/Users/ConsoleUser" | /usr/bin/awk '/Name :/ && ! /loginwindow/ { print $3 }')
+        if [[ "$currentUser" = "loginwindow" || -z "$currentUser" ]]; then
+        	echo "No user logged in, skipping Shortcut installation"
+        	exit 1
+        fi
+
+        # Get the user's ID
+        uID="$(/usr/bin/id -u "$currentUser")"
+
+        shortcutsCLI="/usr/bin/shortcuts"
+        shortcutsDir="/Users/Shared/Acroname"
+
+        # Find .shortcut files
+        /usr/bin/find "$shortcutsDir" -type f -name '*.shortcut' -print0 | \
+        while IFS= read -r -d '' sc; do
+        	# derive a fallback name from the filename (actual shortcut name may differ)
+        	base_name="$(/usr/bin/basename "$sc" .shortcut)"
+
+        	# if a shortcut with that name exists, delete it (idempotent installs)
+        	if /bin/launchctl asuser "$uID" "$shortcutsCLI" list | /usr/bin/grep -Fqx "$base_name"; then
+        		echo "Deleting existing shortcut: $base_name"
+        		/bin/launchctl asuser "$uID" "$shortcutsCLI" delete "$base_name" || true
+        	fi
+
+        	echo "Importing: $sc for user $currentUser (uid $uID)"
+        	if /bin/launchctl asuser "$uID" /usr/bin/open -gj -a Shortcuts "$sc"; then
+        		echo "Imported: $sc"
+        	else
+        		echo "Import FAILED: $sc"
+        	fi
+        done
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgname: "%NAME%-%version%"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        id: acroname.DFU-n-ator
+        options: purge_ds_store
+        scripts: "%RECIPE_CACHE_DIR%/scripts"
+        version: "%version%"
+        chown:
+          - path: "/Users/Shared"
+            user: root
+            group: staff
+            mode: "0777"

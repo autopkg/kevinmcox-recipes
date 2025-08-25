@@ -1,6 +1,6 @@
 Description: Downloads the latest version of Acroname DFU Automator and imports it into Munki.
 Identifier: com.github.kevinmcox.munki.AcronameDFUAutomator
-ParentRecipe: com.github.kevinmcox.download.AcronameDFUAutomator
+ParentRecipe: com.github.kevinmcox.pkg.AcronameDFUAutomator
 MinimumVersion: '2.7.6'
 
 Input:
@@ -22,20 +22,9 @@ Input:
     unattended_uninstall: true
 
 Process:
-  - Processor: PkgRootCreator
-    Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/faux_root"
-      pkgdirs:
-        Applications: "0755"
-
-  - Processor: Copier
-    Arguments:
-      source_path: "%pathname%/DFU Automator.app"
-      destination_path: "%RECIPE_CACHE_DIR%/faux_root/Applications/DFU Automator.app"
-
   - Processor: MunkiInstallsItemsCreator
     Arguments:
-      faux_root: "%RECIPE_CACHE_DIR%/faux_root"
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
       installs_item_paths:
         - /Applications/DFU Automator.app/Contents/MacOS/DFU Automator
 
@@ -48,10 +37,11 @@ Process:
 
   - Processor: MunkiImporter
     Arguments:
-      pkg_path: "%pathname%"
+      pkg_path: "%pkg_path%"
       repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - "%RECIPE_CACHE_DIR%/faux_root"
+        - "%RECIPE_CACHE_DIR%/pkgroot"
+        - "%RECIPE_CACHE_DIR%/scripts"

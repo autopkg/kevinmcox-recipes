@@ -3,16 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest version of Dizzion (formerly Nutanix) Frame and creates a package.</string>
+	<string>Downloads the latest version of Dizzion (formerly Nutanix) Frame and creates a package. Set ARCH to arm64 or x86_64.</string>
 	<key>Identifier</key>
 	<string>com.github.kevinmcox.pkg.Frame</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
 		<string>Frame</string>
+		<key>ARCH</key>
+		<string>arm64</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>1.0.0</string>
+	<string>2.7.6</string>
 	<key>ParentRecipe</key>
 	<string>com.github.kevinmcox.download.Frame</string>
 	<key>Process</key>

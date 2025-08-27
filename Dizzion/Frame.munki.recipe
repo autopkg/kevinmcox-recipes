@@ -1,76 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest version of Dizzion (formerly Nutanix) Frame and imports it into Munki. Set ARCH to arm64 or x86_64.</string>
+	<key>Identifier</key>
+	<string>com.github.kevinmcox.munki.Frame</string>
+	<key>Input</key>
 	<dict>
-		<key>Description</key>
-		<string>Downloads the latest version of Dizzion (formerly Nutanix) Frame and imports it into Munki.</string>
-		<key>Identifier</key>
-		<string>com.github.kevinmcox.munki.Frame</string>
-		<key>Input</key>
+		<key>NAME</key>
+		<string>Frame</string>
+		<key>ARCH</key>
+		<string>x86_64</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%/%ARCH%</string>
+		<key>pkginfo</key>
 		<dict>
-			<key>MUNKI_REPO_SUBDIR</key>
-			<string>apps/%NAME%</string>
-			<key>NAME</key>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Utilities</string>
+			<key>description</key>
+			<string>Frame App provides the same ease of use with Frame in a web browser with additional functionality and benefits not yet available with a browser-based Frame Terminal experience.</string>
+			<key>developer</key>
+			<string>Dizzion, Inc.</string>
+			<key>display_name</key>
 			<string>Frame</string>
-			<key>pkginfo</key>
+			<key>icon_name</key>
+			<string>Frame.png</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>supported_architectures</key>
+			<array>
+				<string>%ARCH%</string>
+			</array>
+			<key>unattended_install</key>
+			<true/>
+			<key>unattended_uninstall</key>
+			<true/>
+			<key>uninstallable</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.7.6</string>
+	<key>ParentRecipe</key>
+	<string>com.github.kevinmcox.download.Frame</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+			<key>Arguments</key>
 			<dict>
-				<key>catalogs</key>
-				<array>
-					<string>testing</string>
-				</array>
-				<key>category</key>
-				<string>Utilities</string>
-				<key>description</key>
-				<string>Frame App provides the same ease of use with Frame in a web browser with additional functionality and benefits not yet available with a browser-based Frame Terminal experience.</string>
-				<key>developer</key>
-				<string>Dizzion, Inc.</string>
-				<key>display_name</key>
-				<string>%NAME%</string>
-				<key>icon_name</key>
-				<string>%NAME%.png</string>
-				<key>name</key>
-				<string>%NAME%</string>
-				<key>postinstall_script</key>
-				<string></string>
-				<key>unattended_install</key>
-				<true/>
-				<key>unattended_uninstall</key>
-				<true/>
-				<key>uninstallable</key>
-				<true/>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
 			</dict>
 		</dict>
-		<key>MinimumVersion</key>
-		<string>1.0.0</string>
-		<key>ParentRecipe</key>
-		<string>com.github.kevinmcox.download.Frame</string>
-		<key>Process</key>
-		<array>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+			<key>Arguments</key>
 			<dict>
-				<key>Processor</key>
-				<string>MunkiPkginfoMerger</string>
-				<key>Arguments</key>
-				<dict>
-					<key>additional_pkginfo</key>
-					<dict>
-						<key>version</key>
-						<string>%version%</string>
-					</dict>
-				</dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+				<key>version_comparison_key</key>
+				<string>CFBundleVersion</string>
 			</dict>
-			<dict>
-				<key>Processor</key>
-				<string>MunkiImporter</string>
-				<key>Arguments</key>
-				<dict>
-					<key>pkg_path</key>
-					<string>%pathname%</string>
-					<key>repo_subdirectory</key>
-					<string>%MUNKI_REPO_SUBDIR%</string>
-					<key>version_comparison_key</key>
-					<string>CFBundleVersion</string>
-				</dict>
-			</dict>
-		</array>
-	</dict>
+		</dict>
+	</array>
+</dict>
 </plist>

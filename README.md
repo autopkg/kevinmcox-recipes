@@ -9,6 +9,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Addigy, Inc.
 * [MDM Watchdog](https://addigy.com/mdm-watchdog/)
 
+### Amazon Web Services
+* [Amazon ECR Docker Credential Helper](https://github.com/awslabs/amazon-ecr-credential-helper)
+
 ### Apple, Inc.
 * [Container](https://github.com/apple/container)
 

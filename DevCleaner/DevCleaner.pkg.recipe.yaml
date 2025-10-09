@@ -1,0 +1,17 @@
+Description: Downloads the latest version of Xcode DevCleaner from Github and builds a package.
+Identifier: com.github.kevinmcox.pkg.DevCleaner
+ParentRecipe: com.github.kevinmcox.download.DevCleaner
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: DevCleaner
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      app_path: "%RECIPE_CACHE_DIR%/unpack/DevCleaner/DevCleaner.app"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/unpack"

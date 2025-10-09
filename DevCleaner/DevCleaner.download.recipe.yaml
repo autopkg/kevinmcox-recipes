@@ -1,0 +1,28 @@
+Description: Downloads the latest version of Xcode DevCleaner from Github.
+Identifier: com.github.kevinmcox.download.DevCleaner
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: DevCleaner
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: DevCleaner.*\.zip
+      github_repo: vashpan/xcode-dev-cleaner
+
+  - Processor: URLDownloader
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: Unarchiver
+    Arguments:
+      archive_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack/DevCleaner"
+      purge_destination: true
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/unpack/DevCleaner/DevCleaner.app"
+      requirement: >-
+        anchor apple generic and identifier "com.oneminutegames.XcodeCleaner" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "3DS5SGYDG6")

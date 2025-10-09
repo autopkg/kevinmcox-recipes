@@ -55,6 +55,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Okta
 * [okta-aws-cli](https://github.com/okta/okta-aws-cli)
 
+### One Minute Games
+* [DevCleaner for Xcode](https://github.com/vashpan/xcode-dev-cleaner)
+
 ### Rafael Conde
 * [HiDock](https://hidock.app)
 

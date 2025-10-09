@@ -1,0 +1,38 @@
+Description: Downloads the latest version of Xcode DevCleaner and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.DevCleaner
+ParentRecipe: com.github.kevinmcox.download.DevCleaner
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: DevCleaner
+  MUNKI_CATEGORY: Utilities
+  MUNKI_REPO_SUBDIR: apps/DevCleaner
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: If you want to reclaim tens of gigabytes of your storage used for various Xcode caches - this tool is for you!
+    developer: One Minute Games
+    display_name: DevCleaner
+    icon_name: DevCleaner.png
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: DmgCreator
+    Arguments:
+      dmg_root: "%RECIPE_CACHE_DIR%/unpack/DevCleaner"
+      dmg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%dmg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/unpack"
+        - "%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg"

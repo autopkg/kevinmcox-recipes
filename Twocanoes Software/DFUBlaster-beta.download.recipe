@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest version of DFU Blaster.</string>
+	<string>Downloads the latest beta version of DFU Blaster.</string>
 	<key>Identifier</key>
-	<string>com.github.kevinmcox.download.DFUBlaster</string>
+	<string>com.github.kevinmcox.download.DFUBlaster-beta</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
@@ -17,13 +17,24 @@
 	<array>
 		<dict>
 			<key>Processor</key>
+			<string>URLTextSearcher</string>
+			<key>Arguments</key>
+			<dict>
+				<key>re_pattern</key>
+				<string>"href":\s*"([^"]+PreBeta-DFU_Blaster_Pro_Build-\d+_Version-[\d.]+\.dmg)"</string>
+				<key>url</key>
+				<string>https://api.bitbucket.org/2.0/repositories/twocanoes/dfu-blaster-public/downloads</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
 			<string>URLDownloader</string>
 			<key>Arguments</key>
 			<dict>
 				<key>filename</key>
 				<string>%NAME%.dmg</string>
 				<key>url</key>
-				<string>https://twocanoes-software-updates.s3.amazonaws.com/DFU_Blaster_Pro.dmg</string>
+				<string>%match%</string>
 			</dict>
 		</dict>
 		<dict>

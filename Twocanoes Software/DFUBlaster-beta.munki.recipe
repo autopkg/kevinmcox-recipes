@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads the latest version of DFU Blaster and imports it into Munki.</string>
+	<string>Downloads the latest beta version of DFU Blaster and imports it into Munki.</string>
 	<key>Identifier</key>
-	<string>com.github.kevinmcox.munki.DFUBlaster</string>
+	<string>com.github.kevinmcox.munki.DFUBlaster-beta</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
@@ -39,7 +39,7 @@
 	<key>MinimumVersion</key>
 	<string>2.7.2</string>
 	<key>ParentRecipe</key>
-	<string>com.github.kevinmcox.download.DFUBlaster</string>
+	<string>com.github.kevinmcox.download.DFUBlaster-beta</string>
 	<key>Process</key>
 	<array>
 		<dict>

@@ -69,6 +69,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 
 ### Twocanoes Software
 * [DFU Blaster Pro](https://twocanoes.com/products/mac/dfu-blaster/)
+* [FileVaultLogin](https://twocanoes.com/knowledge-base/unlock-filevault-automatically/)
 
 ### Vitaly Shukela
 * [websocat](https://github.com/vi/websocat)

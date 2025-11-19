@@ -1,0 +1,49 @@
+Description: Downloads the latest version of ConductorOne's CLI tool Cone, packages it and imports it into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.Cone
+ParentRecipe: com.github.kevinmcox.pkg.Cone
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: Cone
+  ARCH: arm64
+  MUNKI_CATEGORY: Utilities
+  MUNKI_REPO_SUBDIR: ConductorOne/Cone/%ARCH%
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: Cone is a robust command-line tool from ConductorOne! Cone is designed to streamline the use-case-specific tasks for developers, security teams, and other end users.
+    developer: ConductorOne
+    display_name: Cone
+    icon_name: Cone.png
+    minimum_os_version: "11.0"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/cone
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

@@ -21,6 +21,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Cirrus Labs
 * [Tart](https://tart.run)
 
+### ConductorOne
+* [Cone](https://github.com/ConductorOne/cone)
+
 ### DEVONtechnologies
 * [Neo Network Utility](https://www.devontechnologies.com/blog/20240711-network-utility-10)
 

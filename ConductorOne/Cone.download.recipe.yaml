@@ -1,0 +1,39 @@
+Description: Downloads the latest version of ConductorOne's CLI tool Cone from Github. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.Cone
+MinimumVersion: '2.7.6'
+
+Input:
+  NAME: Cone
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: amd64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: ^cone-v([0-9.]+)-darwin-%DOWNLOAD_ARCH%\.zip$
+      github_repo: ConductorOne/cone
+
+  - Processor: URLDownloader
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: Unarchiver
+    Arguments:
+      archive_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/unpack/cone"
+      requirement: >-
+        identifier cone and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = "858DKH55XL"

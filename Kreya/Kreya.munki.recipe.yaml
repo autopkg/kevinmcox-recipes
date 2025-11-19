@@ -1,0 +1,32 @@
+Description: "Downloads the latest version of Kreya and imports it into Munki. Set ARCH to arm64 or x86_64."
+Identifier: com.github.kevinmcox.munki.Kreya
+ParentRecipe: com.github.kevinmcox.download.Kreya
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: Kreya
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: Kreya/%ARCH%
+
+  pkginfo:
+    catalogs:
+    - testing
+    category: Development
+    description: Kreya is a GUI client for gRPC and REST APIs with innovative features
+      for environments, authorizations and more.
+    developer: riok GmbH
+    display_name: '%NAME%'
+    icon_name: '%NAME%.png'
+    minimum_os_version: '13.0'
+    name: '%NAME%'
+    supported_architectures:
+    - '%ARCH%'
+    unattended_install: true
+    unattended_uninstall: true
+    uninstallable: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pathname%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

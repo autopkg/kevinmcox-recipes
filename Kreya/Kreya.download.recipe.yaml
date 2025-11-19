@@ -1,0 +1,41 @@
+Description: "Downloads the latest version of Kreya. Set ARCH to arm64 or x86_64."
+Identifier: com.github.kevinmcox.download.Kreya
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: Kreya
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: x64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: https://stable-downloads\.kreya\.app/\d+\.\d+\.\d+/Kreya-osx-%DOWNLOAD_ARCH%\.dmg
+      result_output_var_name: LINK
+      url: https://kreya.app/downloads/
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%ARCH%.dmg"
+      url: "%LINK%"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: '%pathname%/Kreya.app'
+      requirement: >-
+        identifier "app.kreya" and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = SFZ5V3592Z
+
+  - Processor: AppDmgVersioner
+    Arguments:
+      dmg_path: '%pathname%'

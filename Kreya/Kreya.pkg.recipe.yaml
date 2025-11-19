@@ -1,0 +1,13 @@
+Description: "Downloads the latest version of Kreya and creates a package. Set ARCH to arm64 or x86_64."
+Identifier: com.github.kevinmcox.pkg.Kreya
+ParentRecipe: com.github.kevinmcox.download.Kreya
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: Kreya
+  ARCH: arm64
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      pkg_path: '%RECIPE_CACHE_DIR%/%NAME%-%ARCH%-%version%.pkg'

@@ -22,24 +22,11 @@
 	<array>
 		<dict>
 			<key>Processor</key>
-			<string>FileMover</string>
+			<string>DeprecationWarning</string>
 			<key>Arguments</key>
 			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%/Kreya.app</string>
-				<key>target</key>
-				<string>/Applications/Kreya.app</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>PathDeleter</string>
-			<key>Arguments</key>
-			<dict>
-				<key>path_list</key>
-				<array>
-					<string>%RECIPE_CACHE_DIR%/%NAME%</string>
-				</array>
+				<key>warning_message</key>
+				<string>This recipe is deprecated because of changes to the parent. If you use it let me know and I'll update it instead of deleting it.</string>
 			</dict>
 		</dict>
 	</array>

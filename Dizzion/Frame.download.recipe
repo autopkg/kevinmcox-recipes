@@ -23,7 +23,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>re_pattern</key>
-				<string>(?si)&lt;td[^&gt;]*&gt;\s*Frame\s+App\s+\d+\.x\s+for\s+macos\s*\(arm64\)\s*&lt;/td&gt;\s*&lt;td&gt;\s*([0-9]+(?:\.[0-9]+){2})\s*&lt;/td&gt;</string>
+				<string>(?si)&lt;td[^&gt;]*&gt;\s*Frame\s+App\s+for\s+macOS\s*\(\s*ARM64\s*\)\s*&lt;/td&gt;\s*&lt;td[^&gt;]*&gt;\s*([0-9]+\.[0-9]+\.[0-9]+)\s*&lt;/td&gt;</string>
 				<key>result_output_var_name</key>
 				<string>DOWNLOAD_VERSION</string>
 				<key>url</key>

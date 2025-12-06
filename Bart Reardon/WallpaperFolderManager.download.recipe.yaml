@@ -1,0 +1,26 @@
+Description: Downloads the latest release of WallpaperFolderManager (https://github.com/bartreardon/WallpaperFolderManager).
+Identifier: com.github.kevinmcox.download.WallpaperFolderManager
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: WallpaperFolderManager
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: .*\.pkg$
+      github_repo: bartreardon/WallpaperFolderManager
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: '%NAME%-%version%.pkg'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - 'Developer ID Installer: Bart Reardon (N8GJ2Y5Z9T)'
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: '%pathname%'

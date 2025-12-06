@@ -1,0 +1,30 @@
+Description: Downloads the latest release of WallpaperFolderManager (https://github.com/bartreardon/WallpaperFolderManager) and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.WallpaperFolderManager
+ParentRecipe: com.github.kevinmcox.download.WallpaperFolderManager
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: WallpaperFolderManager
+  MUNKI_REPO_SUBDIR: WallpaperFolderManager
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Management
+    description: A CLI tool written in Swift for programmatically adding custom wallpaper folders to macOS System Settings.
+    developer: Bart Reardon
+    display_name: Wallpaper Folder Manager
+    icon_name: '%NAME%.png'
+    minimum_os_version: '13.0'
+    name: '%NAME%'
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/wallpaper-folder --version
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pathname%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

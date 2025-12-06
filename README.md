@@ -15,6 +15,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Apple, Inc.
 * [Container](https://github.com/apple/container)
 
+### Bart Reardon
+* [WallpaperFolderManager](https://github.com/bartreardon/WallpaperFolderManager)
+
 ### Camera Bits, Inc.
 * [Photo Mechanic](https://www.camerabits.com)
 

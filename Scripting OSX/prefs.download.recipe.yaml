@@ -1,0 +1,26 @@
+Description: Downloads the latest release of prefs (https://github.com/scriptingosx/swift-prefs).
+Identifier: com.github.kevinmcox.download.prefs
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: prefs
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: .*\.pkg$
+      github_repo: scriptingosx/swift-prefs
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: '%NAME%-%version%.pkg'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - 'Developer ID Installer: Armin Briegel (JME5BW3F3R)'
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: '%pathname%'

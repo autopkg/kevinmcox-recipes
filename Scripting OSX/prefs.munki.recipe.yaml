@@ -1,0 +1,38 @@
+Description: Downloads the latest release of prefs (https://github.com/scriptingosx/swift-prefs) and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.prefs
+ParentRecipe: com.github.kevinmcox.download.prefs
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: prefs
+  MUNKI_REPO_SUBDIR: ScriptingOSX/prefs
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Management
+    description: A CLI tool written in Swift to print all composited preferences keys and their type and value, with the preference domain where the value was set.
+    developer: Armin Briegel
+    display_name: Prefs
+    minimum_os_version: '15.5'
+    name: '%NAME%'
+    postinstall_script: |
+      #!/bin/sh
+      # Remove this script from your override if you want to keep "plist2profile" on disk
+      /bin/rm -f /usr/local/bin/plist2profile
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/prefs --version
+
+Process:
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: '%version%'
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pathname%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

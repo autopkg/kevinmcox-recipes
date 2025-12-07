@@ -15,6 +15,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Apple, Inc.
 * [Container](https://github.com/apple/container)
 
+### Armin Briegel (Scripting OS X)
+* [prefs](https://github.com/scriptingosx/swift-prefs)
+
 ### Bart Reardon
 * [WallpaperFolderManager](https://github.com/bartreardon/WallpaperFolderManager)
 

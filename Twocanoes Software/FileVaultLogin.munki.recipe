@@ -54,6 +54,15 @@
 	<array>
 		<dict>
 			<key>Processor</key>
+			<string>DeprecationWarning</string>
+			<key>Arguments</key>
+			<dict>
+				<key>warning_message</key>
+				<string>This app was renamed by the vendor. Switch to com.github.kevinmcox.munki.PasswordUtility instead.</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
 			<string>FlatPkgUnpacker</string>
 			<key>Arguments</key>
 			<dict>

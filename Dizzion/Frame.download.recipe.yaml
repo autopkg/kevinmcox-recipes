@@ -1,0 +1,42 @@
+Description: "Downloads the latest version of Dizzion (formerly Nutanix) Frame. Set ARCH to arm64 or x86_64."
+Identifier: com.github.kevinmcox.download.Frame
+MinimumVersion: "2.7.6"
+
+Input:
+  NAME: Frame
+  ARCH: arm64
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      url: "https://files.difr.com"
+      re_pattern: '(?i)>\s*Version\s*([0-9]+(?:\.[0-9]+){2})\s*<'
+      result_output_var_name: DOWNLOAD_VERSION
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "x86_64"
+      input_string: "%ARCH%"
+      replace: "x64"
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "https://prod-sup-5683567dcbd60804cb34.s3.amazonaws.com/Frame+App/%DOWNLOAD_VERSION%/darwin/%DOWNLOAD_ARCH%/Frame-%DOWNLOAD_VERSION%-%DOWNLOAD_ARCH%.dmg"
+      filename: "Frame-%ARCH%.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%/Frame.app"
+      requirement: >
+        identifier "frame.application" and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = "74Z7ZNLP82"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%pathname%/Frame.app/Contents/Info.plist"
+      plist_version_key: CFBundleVersion

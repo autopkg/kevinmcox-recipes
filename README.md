@@ -51,6 +51,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Kreya
 * [Kreya](https://kreya.app)
 
+### Kubernetes
+* [Kustomize](https://github.com/kubernetes-sigs/kustomize/)
+
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 

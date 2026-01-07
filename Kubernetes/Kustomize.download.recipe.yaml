@@ -1,0 +1,31 @@
+Description: Downloads the latest version of Kustomize from Github (https://github.com/kubernetes-sigs/kustomize). Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.Kustomize
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: Kustomize
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: amd64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: ^kustomize_v([0-9.]+)_darwin_%DOWNLOAD_ARCH%\.tar.gz$
+      github_repo: kubernetes-sigs/kustomize
+      latest_only: true
+
+  - Processor: URLDownloader
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: kustomize/v([0-9]+\.[0-9]+\.[0-9]+)
+      result_output_var_name: version
+      url: https://github.com/kubernetes-sigs/kustomize/releases/latest
+
+  - Processor: EndOfCheckPhase

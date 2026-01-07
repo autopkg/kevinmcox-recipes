@@ -1,0 +1,51 @@
+Description: Downloads the latest version of Kustomize from Github (https://github.com/kubernetes-sigs/kustomize), builds a package and imports it into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.Kustomize
+ParentRecipe: com.github.kevinmcox.pkg.Kustomize
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: Kustomize
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: Kubernetes/kustomize/%ARCH%
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: kustomize lets you customize raw, template-free YAML files for multiple purposes, leaving the original YAML untouched and usable as is. kustomize targets kubernetes; it understands and can patch kubernetes style API objects. It's like make, in that what it does is declared in a file, and it's like sed, in that it emits edited text.
+    developer: Kubernetes
+    display_name: Kustomize
+    icon_name: Kubernetes.png
+    minimum_os_version: "11.0"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/kustomize version | /usr/bin/cut -c2-
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/kustomize
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/homebysix/pre-commit-macadmin
+    rev: v1.22.0
+    hooks:
+    - id: check-autopkg-recipes
+      args: ['--recipe-prefix', 'com.github.kevinmcox.', "--strict", '--']
+    - id: check-plists
+    - id: forbid-autopkg-overrides
+    - id: forbid-autopkg-trust-info
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=200"]
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]

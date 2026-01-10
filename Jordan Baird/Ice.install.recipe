@@ -14,18 +14,16 @@
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.kevinmcox.download.Ice</string>
+	<string>com.github.kevinmcox.pkg.Ice</string>
 	<key>Process</key>
 	<array>
 		<dict>
 			<key>Processor</key>
-			<string>FileMover</string>
+			<string>Installer</string>
 			<key>Arguments</key>
 			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%/Ice.app</string>
-				<key>target</key>
-				<string>/Applications/Ice.app</string>
+				<key>pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg</string>
 			</dict>
 		</dict>
 	</array>

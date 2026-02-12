@@ -56,7 +56,7 @@
 				<key>result_output_var_name</key>
 				<string>version</string>
 				<key>re_pattern</key>
-				<string>android-studio-([0-9]+(?:\.[0-9]+)+)-%output_string%\.dmg</string>
+				<string>https?://[^/]+/android/studio/install/([0-9]+(?:\.[0-9]+)*)/android-studio-[^/]+-%output_string%\.dmg(?:\?.*)?</string>
 				<key>url</key>
 				<string>https://developer.android.com/studio</string>
 			</dict>
@@ -69,7 +69,7 @@
 				<key>result_output_var_name</key>
 				<string>download_url</string>
 				<key>re_pattern</key>
-				<string>(https://(?:(?:redirector\.gvt1\.com/edgedl)|(?:edgedl\.me\.gvt1\.com))/android/studio/install/[^/]+/android-studio-[0-9]+(?:\.[0-9]+)*-%output_string%\.dmg)(?:\?.*)?</string>
+				<string>(https://(?:(?:redirector\.gvt1\.com/edgedl)|(?:edgedl\.me\.gvt1\.com))/android/studio/install/[^/]+/android-studio-[^/]+-%output_string%\.dmg)(?:\?.*)?</string>
 				<key>url</key>
 				<string>https://developer.android.com/studio</string>
 			</dict>

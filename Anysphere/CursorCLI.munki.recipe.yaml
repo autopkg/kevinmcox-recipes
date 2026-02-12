@@ -27,7 +27,7 @@ Input:
     unattended_uninstall: true
     version_script: |
       #!/bin/sh
-      /usr/bin/grep -Eo 'agent-cli@[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[a-f0-9]+' \
+      /usr/bin/grep -Eo 'agent-cli@[0-9]{4}\.[0-9]{2}\.[0-9]{2}' \
         /usr/local/cursor-agent/index.js | \
         /usr/bin/head -n1 | \
         /usr/bin/cut -d@ -f2

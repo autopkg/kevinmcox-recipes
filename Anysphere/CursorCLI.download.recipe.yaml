@@ -1,0 +1,61 @@
+Description: Downloads the latest version of the Cursor CLI (https://cursor.com/cli). Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.CursorCLI
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: CursorCLI
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: x64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: lab/([^/]+)\/\$\{OS\}
+      result_output_var_name: version
+      url: https://cursor.com/install
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "https://downloads.cursor.com/lab/%version%/darwin/%DOWNLOAD_ARCH%/agent-cli-package.tar.gz"
+      filename: "agent-cli-package.tar.gz"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: Unarchiver
+    Arguments:
+      archive_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/unpack/dist-package/node"
+      requirement: >-
+        identifier node and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = HX7739G8FX
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/unpack/dist-package/rg"
+      requirement: >-
+        identifier rg and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = DCNK4UB866
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/unpack/dist-package/spawn-helper"
+      requirement: >-
+        identifier "spawn-helper" and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = DCNK4UB866

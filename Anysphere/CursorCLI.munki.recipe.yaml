@@ -1,0 +1,44 @@
+Description: Downloads the latest version of Cursor CLI (https://cursor.com/cli), builds a package and imports it into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.CursorCLI
+ParentRecipe: com.github.kevinmcox.pkg.CursorCLI
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: CursorCLI
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: "Cursor/CLI/%ARCH%"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: Ship code with agents. Right from your terminal.
+    developer: Anysphere, Inc.
+    display_name: Cursor CLI
+    icon_name: CursorCLI.png
+    minimum_os_version: "13.5"
+    name: "%NAME%"
+    postuninstall_script: |
+      #!/bin/sh
+      /bin/rm -f /usr/local/bin/agent /usr/local/bin/cursor-agent
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/bin/grep -Eo 'agent-cli@[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[a-f0-9]+' \
+        /usr/local/cursor-agent/index.js | \
+        /usr/bin/head -n1 | \
+        /usr/bin/cut -d@ -f2
+
+Process:
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

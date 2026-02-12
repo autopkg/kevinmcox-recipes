@@ -12,6 +12,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Amazon Web Services
 * [Amazon ECR Docker Credential Helper](https://github.com/awslabs/amazon-ecr-credential-helper)
 
+### Anysphere, Inc.
+* [Cursor CLI](https://cursor.com/cli)
+
 ### Apple, Inc.
 * [Container](https://github.com/apple/container)
 

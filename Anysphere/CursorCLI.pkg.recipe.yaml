@@ -1,0 +1,57 @@
+Description: Downloads the latest version of Cursor CLI (https://cursor.com/cli) and builds a package. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.pkg.CursorCLI
+ParentRecipe: com.github.kevinmcox.download.CursorCLI
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: CursorCLI
+  ARCH: arm64
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        usr/local: "0755"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/scripts"
+      pkgdirs: {}
+
+  - Processor: FileCreator
+    Arguments:
+      file_content: |
+        #!/bin/sh
+
+        /bin/ln -sf /usr/local/cursor-agent/cursor-agent /usr/local/bin/agent
+        /bin/ln -sf /usr/local/cursor-agent/cursor-agent /usr/local/bin/cursor-agent
+      file_mode: "0755"
+      file_path: "%RECIPE_CACHE_DIR%/scripts/postinstall"
+
+  - Processor: FileMover
+    Arguments:
+      source: "%RECIPE_CACHE_DIR%/unpack/dist-package"
+      target: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/cursor-agent"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        id: com.cursor.cli
+        pkgname: "%NAME%-%ARCH%-%version%"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        scripts: "%RECIPE_CACHE_DIR%/scripts"
+        version: "%version%"
+        chown:
+          - path: "/usr/local/cursor-agent"
+            user: root
+            group: wheel
+            mode: "0755"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"
+        - "%RECIPE_CACHE_DIR%/scripts"
+        - "%RECIPE_CACHE_DIR%/unpack"

@@ -1,0 +1,100 @@
+Description: |
+  Imports a manual download of the fleetd package into Munki.
+
+  REQUIRED: Package supplied with the -p (or --pkg) option.
+  REQUIRED: Package version (MINVER) supplied with the -k option.
+
+  EXAMPLE: autopkg run fleetd.munki.recipe.yaml -p ~/Downloads/fleet-osquery.pkg -k MINVER=1.51.1
+
+Identifier: com.github.kevinmcox.munki.fleetd
+MinimumVersion: 2.9.0
+
+Input:
+  NAME: fleetd
+  MUNKI_REPO_SUBDIR: Fleet/fleetd
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Management
+    description: fleetd is a monitoring agent leveraging osquery.
+    developer: Fleet Device Management, Inc.
+    display_name: Fleet
+    icon_name: fleet.png
+    installcheck_script: |
+      #!/bin/zsh
+
+      MIN_VERSION="%MINVER%"
+
+      PLIST="/Library/LaunchDaemons/com.fleetdm.orbit.plist"
+      ORBIT="/opt/orbit/bin/orbit/macos/stable/orbit"
+      OSQUERY="/opt/orbit/bin/osqueryd/macos-app/stable/osquery.app/Contents/MacOS/osqueryd"
+
+      # Make sure the files are present
+      if [[ ! -x "${ORBIT}" ]]; then
+        echo "orbit is missing or not executable"
+        exit 0
+      fi
+
+      if [[ ! -x "${OSQUERY}" ]]; then
+        echo "osqueryd is missing or not executable"
+        exit 0
+      fi
+
+      if [[ ! -f "${PLIST}" ]]; then
+        echo "LaunchDaemon is missing"
+        exit 0
+      fi
+
+      # Orbit version check (installed >= expected)
+      INSTALLED_VERSION=$("${ORBIT}" --version | /usr/bin/awk '{print $2}')
+
+      autoload -Uz is-at-least
+      if ! is-at-least "${MIN_VERSION}" "${INSTALLED_VERSION}"; then
+        echo "orbit ${INSTALLED_VERSION} is out of date"
+        exit 0
+      fi
+
+      # launchd running
+      LABEL=$(/usr/libexec/PlistBuddy -c "Print :Label" "${PLIST}" 2>/dev/null || basename "${PLIST}" .plist)
+
+      if ! /bin/launchctl print system/"${LABEL}" 2>/dev/null | /usr/bin/grep -q "state = running"; then
+        echo "LaunchDaemon is not running"
+        exit 0
+      fi
+
+      # No installation needed
+      exit 1
+    name: "%NAME%"
+    minimum_os_version: "10.15"
+    unattended_install: true
+    unattended_uninstall: true
+    uninstall_method: uninstall_script
+    uninstall_script: |
+      #!/bin/sh
+      # BASED ON THE OFFICIAL FLEET SCRIPT REFERENCED BELOW
+      # https://fleetdm.com/guides/how-to-uninstall-fleetd
+      # https://github.com/fleetdm/fleet/blob/main/it-and-security/lib/macos/scripts/uninstall-fleetd-macos.sh
+
+      /bin/launchctl stop com.fleetdm.orbit
+      /bin/launchctl unload /Library/LaunchDaemons/com.fleetdm.orbit.plist
+      /usr/bin/pkill fleet-desktop || true
+      /bin/rm -rf /Library/LaunchDaemons/com.fleetdm.orbit.plist \
+        /var/lib/orbit \
+        /usr/local/bin/orbit \
+        /var/log/orbit \
+        /opt/orbit/
+      /usr/sbin/pkgutil --forget com.fleetdm.orbit.base.pkg || true
+
+
+Process:
+  - Processor: PackageRequired
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "null"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%PKG%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

@@ -39,6 +39,10 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Dizzion, Inc. (Nutanix)
 * [Frame](https://www.dizzion.com)
 
+### Fleet Device Management, Inc.
+* [fleetd](https://fleetdm.com)  
+This recipe requires a pre-downloaded package, and a version number, to be passed to it at runtime.
+
 ### Google
 * [Android Studio](https://developer.android.com/studio)
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)

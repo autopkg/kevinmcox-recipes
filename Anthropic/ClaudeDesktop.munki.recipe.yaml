@@ -1,0 +1,29 @@
+Description: Downloads the latest version of Claude Desktop as a DMG and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.ClaudeDesktop
+ParentRecipe: com.github.kevinmcox.download.ClaudeDesktop
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ClaudeDesktop
+  MUNKI_CATEGORY: Utilities
+  MUNKI_REPO_SUBDIR: Anthropic/ClaudeDesktop
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: >-
+        The desktop app gives you Claude Code with a graphical interface: visual diff review, live app preview, GitHub PR monitoring with auto-merge, parallel sessions with Git worktree isolation, and the ability to run tasks remotely. No terminal required.
+    developer: Anthropic PBC
+    display_name: Claude Desktop
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

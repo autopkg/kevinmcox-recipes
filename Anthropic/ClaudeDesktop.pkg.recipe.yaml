@@ -1,0 +1,27 @@
+Description: Downloads the latest version of Claude Desktop as a PKG.
+Identifier: com.github.kevinmcox.pkg.ClaudeDesktop
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ClaudeDesktop
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: https?://downloads\.claude\.ai/releases/darwin/universal/[0-9]+(?:\.[0-9]+)*/Claude-[a-f0-9]{40}(?=\.zip)
+      url: https://downloads.claude.ai/releases/darwin/universal/RELEASES.json
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%.pkg"
+      url: "%match%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      requirement:
+        - "Developer ID Installer: Anthropic PBC (Q6L2SF6YDW)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"

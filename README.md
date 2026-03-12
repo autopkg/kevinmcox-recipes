@@ -64,6 +64,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Kubernetes
 * [Kustomize](https://github.com/kubernetes-sigs/kustomize/)
 
+### Meta Platforms, Inc.
+* [dotslash](https://dotslash-cli.com/)
+
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 

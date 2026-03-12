@@ -1,0 +1,45 @@
+Description: Downloads the latest version of dotslash from Github (https://github.com/facebook/dotslash), builds a package and imports it into Munki. Set ARCH to either universal, arm64 or x86_64. Remove the supported_architectures array if using universal.
+Identifier: com.github.kevinmcox.munki.dotslash
+ParentRecipe: com.github.kevinmcox.pkg.dotslash
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: dotslash
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: Meta/dotslash/%ARCH%
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: DotSlash (dotslash) is a command-line tool that lets you represent a set of platform-specific, heavyweight executables with an equivalent small, easy-to-read text file. In turn, this makes it efficient to store executables in source control without hurting repository size. This paves the way for checking build toolchains and other tools directly into the repo, reducing dependencies on the host environment and thereby facilitating reproducible builds.
+    developer: Meta Platforms, Inc.
+    display_name: dotslash
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/dotslash --version | /usr/bin/grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/dotslash
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

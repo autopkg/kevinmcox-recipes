@@ -1,0 +1,37 @@
+Description: Downloads the latest version of dotslash from Github (https://github.com/facebook/dotslash). Set ARCH to either universal, arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.dotslash
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: dotslash
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: "universal"
+      input_string: "%ARCH%"
+      replace: ""
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "arm64"
+      input_string: "%output_string%"
+      replace: "-arm64"
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "x86_64"
+      input_string: "%output_string%"
+      replace: "-x86_64"
+      result_output_var_name: "DOWNLOAD_ARCH"
+
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: "^dotslash-macos%DOWNLOAD_ARCH%.tar.gz$"
+      github_repo: "facebook/dotslash"
+      latest_only: true
+
+  - Processor: URLDownloader
+
+  - Processor: EndOfCheckPhase

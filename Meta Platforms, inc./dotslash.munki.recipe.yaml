@@ -16,6 +16,7 @@ Input:
     developer: Meta Platforms, Inc.
     display_name: dotslash
     icon_name: "%NAME%.png"
+    minimum_os_version: "11.0"
     name: "%NAME%"
     supported_architectures:
       - "%ARCH%"

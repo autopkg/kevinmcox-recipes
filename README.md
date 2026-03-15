@@ -46,6 +46,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [fleetd](https://fleetdm.com)  
 This recipe requires a pre-downloaded package, and a version number, to be passed to it at runtime.
 
+### FullStory, Inc.
+* [gRPCurl](https://github.com/fullstorydev/grpcurl)
+
 ### Google
 * [Android Studio](https://developer.android.com/studio)
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)

@@ -1,0 +1,18 @@
+Description: Downloads the latest version of grpcurl from Github (https://github.com/fullstorydev/grpcurl). Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.grpcurl
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: grpcurl
+  ARCH: arm64
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: '^grpcurl_([^_]+)_osx_%ARCH%\.tar\.gz$'
+      github_repo: "fullstorydev/grpcurl"
+      latest_only: true
+
+  - Processor: URLDownloader
+
+  - Processor: EndOfCheckPhase

@@ -1,0 +1,46 @@
+Description: Downloads the latest version of grpcurl from Github (https://github.com/fullstorydev/grpcurl), builds a package and imports it into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.grpcurl
+ParentRecipe: com.github.kevinmcox.pkg.grpcurl
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: grpcurl
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: FullStory/grpcurl/%ARCH%
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: grpcurl is a command-line tool that lets you interact with gRPC servers. It's basically curl for gRPC servers.
+    developer: FullStory, Inc.
+    display_name: gRPCurl
+    icon_name: "%NAME%.png"
+    minimum_os_version: "11.0"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/grpcurl -version 2>&1 | /usr/bin/grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/grpcurl
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

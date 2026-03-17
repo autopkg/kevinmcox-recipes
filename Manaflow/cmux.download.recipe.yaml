@@ -1,0 +1,28 @@
+Description: Downloads the latest version of cmux from Github.
+Identifier: com.github.kevinmcox.download.cmux
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: cmux
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: 'cmux-macos.dmg'
+      github_repo: manaflow-ai/cmux
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "cmux-%version%.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: '%pathname%/cmux.app'
+      requirement: >-
+        identifier "com.cmuxterm.app" and
+        anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = "7WLXT3NR37"

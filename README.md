@@ -67,6 +67,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Kubernetes
 * [Kustomize](https://github.com/kubernetes-sigs/kustomize/)
 
+### Manaflow
+* [cmux](https://www.cmux.dev)
+
 ### Meta Platforms, Inc.
 * [dotslash](https://dotslash-cli.com/)
 

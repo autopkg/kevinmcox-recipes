@@ -1,0 +1,10 @@
+Description: Downloads the latest version of cmux from Github and builds a package.
+Identifier: com.github.kevinmcox.pkg.cmux
+ParentRecipe: com.github.kevinmcox.download.cmux
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: cmux
+
+Process:
+  - Processor: AppPkgCreator

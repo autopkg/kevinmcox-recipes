@@ -1,0 +1,27 @@
+Description: Downloads the latest version of cmux and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.cmux
+ParentRecipe: com.github.kevinmcox.download.cmux
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: cmux
+  MUNKI_CATEGORY: Development
+  MUNKI_REPO_SUBDIR: Manaflow/cmux
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: "Ghostty-based macOS terminal with vertical tabs and notifications for AI coding agents."
+    developer: Manaflow
+    display_name: cmux
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

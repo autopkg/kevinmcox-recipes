@@ -1,21 +1,16 @@
-Description: Downloads the latest version of Tart from Github and builds a package. Code Signature Verification is disabled due to broken code signing by the developer.
+Description: Downloads the latest version of Tart from Github and builds a package.
 Identifier: com.github.kevinmcox.pkg.Tart
 ParentRecipe: com.github.kevinmcox.download.Tart
 MinimumVersion: '2.7'
 
 Input:
   NAME: Tart
-  DISABLE_CODE_SIGNATURE_VERIFICATION: true
 
 Process:
   - Processor: PkgRootCreator
     Arguments:
       pkgdirs:
-        Library: "0755"
-        Library/Application Support: "0755"
         Library/Application Support/Tart: "0755"
-        usr: "0755"
-        usr/local: "0755"
         usr/local/bin: "0755"
       pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
 

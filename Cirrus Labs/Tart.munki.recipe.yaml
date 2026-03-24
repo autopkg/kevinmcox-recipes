@@ -1,13 +1,12 @@
-Description: Downloads the latest version of Tart and imports it into Munki. Code Signature Verification is disabled due to broken code signing by the developer.
+Description: Downloads the latest version of Tart and imports it into Munki
 Identifier: com.github.kevinmcox.munki.Tart
 ParentRecipe: com.github.kevinmcox.pkg.Tart
 MinimumVersion: '2.7'
 
 Input:
   NAME: Tart
-  DISABLE_CODE_SIGNATURE_VERIFICATION: true
   MUNKI_CATEGORY: Virtualization
-  MUNKI_REPO_SUBDIR: cli-tools/tart
+  MUNKI_REPO_SUBDIR: Tart
 
   pkginfo:
     catalogs:
@@ -17,8 +16,28 @@ Input:
     developer: Cirrus Labs
     display_name: Tart
     icon_name: Tart.png
-    minimum_os_version: '12.0'
+    minimum_os_version: "13.0"
     name: "%NAME%"
+    preinstall_script: |
+      #!/bin/bash
+
+      # The change of application Bundle ID by the developer led to duplicate installs. This script cleans those up.
+
+      root="/Library/Application Support/Tart"
+      canonical="${root}/tart.app"
+      old_id="org.cirruslabs.tart"
+
+      # Remove canonical location only if it's the old Bundle ID
+      if [ -d "${canonical}" ]; then
+      	id=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$canonical/Contents/Info.plist" 2>/dev/null)
+      	[ "${id}" = "${old_id}" ] && /bin/rm -rf "${canonical}"
+      fi
+
+      # Remove any tart* directories except the canonical app
+      for dir in "${root}"/tart*; do
+      	[ "${dir}" = "${canonical}" ] && continue
+      	[ -d "${dir}" ] && /bin/rm -rf "${dir}"
+      done
     unattended_install: true
     unattended_uninstall: true
 

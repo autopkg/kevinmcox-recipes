@@ -16,14 +16,14 @@ Process:
 
   - Processor: URLTextSearcher
     Arguments:
-      re_pattern: https://stable-downloads\.kreya\.app/\d+\.\d+\.\d+/Kreya-osx-%DOWNLOAD_ARCH%\.dmg
-      result_output_var_name: LINK
+      re_pattern: 'Download Kreya[\s\S]*?<p[^>]*>\s*(\d+\.\d+\.\d+)\s*</p>'
+      result_output_var_name: VERSION
       url: https://kreya.app/downloads/
 
   - Processor: URLDownloader
     Arguments:
       filename: "%NAME%-%ARCH%.dmg"
-      url: "%LINK%"
+      url: "https://stable-downloads.kreya.app/%VERSION%/Kreya-osx-%DOWNLOAD_ARCH%.dmg"
 
   - Processor: EndOfCheckPhase
 

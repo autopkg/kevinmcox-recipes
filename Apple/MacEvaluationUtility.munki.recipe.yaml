@@ -1,0 +1,82 @@
+Description: |
+  Imports a manual download of the Mac Evaluation Utility package into Munki.
+
+  REQUIRED: Package supplied with the -p (or --pkg) option.
+
+  EXAMPLE: autopkg run MacEvaluationUtility.munki.recipe.yaml -p MacEvaluationUtility.pkg
+
+Identifier: com.github.kevinmcox.munki.MacEvaluationUtility
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: MacEvaluationUtility
+  MUNKI_REPO_SUBDIR: Apple/MacEvaluationUtility
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: "Mac Evaluation Utility evaluates your organization's ability to deploy Mac computers. The app checks the network to help verify that critical hosts and services are reachable for essential services like Automated Device Enrollment and software updates. It also examines the device's management configuration to help make sure you're aligned with best practices. The results can be shared with colleagues to help you build a plan to succeed at deploying Mac computers at scale."
+    developer: Apple
+    display_name: Mac Evaluation Utility
+    icon_name: MacEvaluationUtility.png
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+
+Process:
+  - Processor: PackageRequired
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "null"
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      expected_authority_names:
+        - Software Update
+        - Apple Software Update Certification Authority
+        - Apple Root CA
+
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: True
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: '%RECIPE_CACHE_DIR%/unpack/MacEvaluationUtility.pkg/Payload'
+      destination_path: '%RECIPE_CACHE_DIR%/payload'
+      purge_destination: True
+
+  - Processor: PlistReader
+    Arguments:
+      info_path: '%RECIPE_CACHE_DIR%/payload/Applications/Mac Evaluation Utility.app'
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      derive_minimum_os_version: true
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      installs_item_paths:
+        - /Applications/Mac Evaluation Utility.app
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+      - '%RECIPE_CACHE_DIR%/unpack'
+      - '%RECIPE_CACHE_DIR%/payload'

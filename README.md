@@ -20,6 +20,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 
 ### Apple, Inc.
 * [Container](https://github.com/apple/container)
+* Mac Evaluation Utility (This recipe requires a pre-downloaded package to be passed to it at runtime.)
 
 ### Armin Briegel (Scripting OS X)
 * [prefs](https://github.com/scriptingosx/swift-prefs)

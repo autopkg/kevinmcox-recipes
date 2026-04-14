@@ -19,6 +19,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Cursor CLI](https://cursor.com/cli)
 
 ### Apple, Inc.
+* Command Line Tools for Xcode (This recipe requires a pre-downloaded package to be passed to it at runtime.)
 * [Container](https://github.com/apple/container)
 * Mac Evaluation Utility (This recipe requires a pre-downloaded package to be passed to it at runtime.)
 

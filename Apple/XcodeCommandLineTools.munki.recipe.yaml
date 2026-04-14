@@ -1,0 +1,59 @@
+Description: |
+  Imports a manual download of the Command Line Tools for Xcode package into Munki.
+
+  REQUIRED: Package supplied with the -p (or --pkg) option.
+
+  EXAMPLE: autopkg run XcodeCommandLineTools.munki.recipe.yaml -p CommandLineTools.pkg
+
+Identifier: com.github.kevinmcox.munki.XcodeCommandLineTools
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: XcodeCLT
+  MUNKI_REPO_SUBDIR: Apple/CommandLineTools
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: "This package enables UNIX-style development via Terminal by installing command line developer tools, as well as macOS SDK frameworks and headers. Many useful tools are included, such as the Apple LLVM compiler, linker, and Make. If you use Xcode, these tools are also embedded within the Xcode IDE."
+    developer: Apple
+    display_name: Command Line Tools for Xcode
+    icon_name: XcodeCLT.png
+    installcheck_script: |
+      #!/bin/sh
+      if DEVELOPER_DIR=$(xcode-select -p 2>/dev/null); then
+      	echo "Developer tools found at: $DEVELOPER_DIR"
+      	exit 1
+      fi
+      echo "Command Line Tools or Xcode not found"
+      exit 0
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+    uninstall_method: uninstall_script
+    uninstall_script: |
+      #!/bin/sh
+      /bin/rm -rf /Library/Developer/CommandLineTools
+      /usr/bin/xcode-select --reset
+
+
+Process:
+  - Processor: PackageRequired
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "null"
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      expected_authority_names:
+        - Software Update
+        - Apple Software Update Certification Authority
+        - Apple Root CA
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

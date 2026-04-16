@@ -1,0 +1,178 @@
+Description: Downloads the latest version of Geordie (https://www.geordie.ai) and imports it into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.Geordie
+ParentRecipe: com.github.kevinmcox.download.Geordie
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: geordie-endpoint-scanner
+  ARCH: arm64
+  GEORDIE_INSTANCE_NAME:
+  GEORDIE_ENDPOINT_SCANNING_TOKEN:
+  MUNKI_CATEGORY: Management
+  MUNKI_REPO_SUBDIR: Geordie/%ARCH%
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: "%MUNKI_CATEGORY%"
+    description: Geordie gives enterprise teams deep, continuous understanding of agent behavior and posture, lighting the way to safe agentic AI. No latency. No surprises.
+    developer: Geordie AI LTD
+    display_name: Geordie
+    icon_name: Geordie.png
+    minimum_os_version: "11.0"
+    name: "%NAME%"
+    postinstall_script: |
+      #!/bin/bash
+      INSTANCE_NAME="%GEORDIE_INSTANCE_NAME%"
+      ENDPOINT_SCANNING_TOKEN="%GEORDIE_ENDPOINT_SCANNING_TOKEN%"
+      AGENT_USER="geordie"
+      KEYCHAIN_SERVICE="geordie-api-$INSTANCE_NAME"
+      BINARY_EXECUTABLE="geordie-endpoint-scanner"
+
+      store_credentials() {
+        echo "Storing API credentials in System keychain..."
+        KEYCHAIN_PATH="/Library/Keychains/System.keychain"
+        security delete-generic-password -a "$AGENT_USER" -s "$KEYCHAIN_SERVICE" "$KEYCHAIN_PATH" 2>/dev/null || true
+        security add-generic-password \
+          -a "$AGENT_USER" \
+          -s "$KEYCHAIN_SERVICE" \
+          -w "$ENDPOINT_SCANNING_TOKEN" \
+          -A \
+          -T "/opt/geordie/bin/$BINARY_EXECUTABLE" \
+          -T "/usr/bin/security" \
+          "$KEYCHAIN_PATH"
+        if [[ $? -eq 0 ]]; then
+          echo "Credentials stored successfully"
+        else
+          echo "ERROR: Failed to store credentials"
+          exit 1
+        fi
+      }
+
+      install_geordie_agent() {
+        LABEL="ai.geordie.endpoint-scanner"
+        PLIST_PATH="/Library/LaunchAgents/${LABEL}.plist"
+        CURRENT_USER=$(stat -f%Su /dev/console 2>/dev/null || true)
+        if [ -f "/opt/geordie/bin/geordie-endpoint-scanner" ]; then
+          chmod 755 /opt/geordie/bin/geordie-endpoint-scanner
+        else
+          echo "ERROR: binary not found"
+          exit 1
+        fi
+        cat > "$PLIST_PATH" <<PLISTEOF
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+        <key>Label</key><string>${LABEL}</string>
+        <key>StandardOutPath</key><string>/tmp/geordie-endpoint.stdout.log</string>
+        <key>StandardErrorPath</key><string>/tmp/geordie-endpoint.stderr.log</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>/opt/geordie/bin/geordie-endpoint-scanner</string>
+          <string>--instance</string>
+          <string>%GEORDIE_INSTANCE_NAME%</string>
+          <string>--unattended</string>
+        </array>
+        <key>StartInterval</key><integer>300</integer>
+        <key>RunAtLoad</key><true/>
+      </dict>
+      </plist>
+      PLISTEOF
+        chown root:wheel "$PLIST_PATH"
+        chmod 644 "$PLIST_PATH"
+        if [ -n "$CURRENT_USER" ] && [ "$CURRENT_USER" != "root" ]; then
+          CURRENT_UID=$(id -u "$CURRENT_USER")
+          echo "Reloading LaunchAgent for $CURRENT_USER..."
+          launchctl bootout gui/$CURRENT_UID/$LABEL 2>/dev/null || true
+          launchctl bootstrap gui/$CURRENT_UID "$PLIST_PATH"
+          launchctl start gui/$CURRENT_UID/$LABEL
+        else
+          echo "No active user session. LaunchAgent will load at next login."
+        fi
+      }
+
+      main() {
+        echo "Starting Geordie endpoint agent installation via Munki..."
+        store_credentials
+        install_geordie_agent
+        echo "Installation complete. Check /tmp/geordie-endpoint.stdout.log for runtime logs."
+      }
+
+      main "$@"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    uninstall_method: uninstall_script
+    uninstall_script: |
+      #!/bin/bash
+      INSTANCE_NAME="%GEORDIE_INSTANCE_NAME%"
+      LABEL="ai.geordie.endpoint-scanner"
+      PLIST_PATH="/Library/LaunchAgents/${LABEL}.plist"
+      KEYCHAIN_PATH="/Library/Keychains/System.keychain"
+      AGENT_USER="geordie"
+
+      echo "Starting Geordie uninstall for instance '${INSTANCE_NAME}'..."
+
+      CURRENT_USER=$(/usr/bin/stat -f%Su /dev/console 2>/dev/null || true)
+      CURRENT_UID=$(/usr/bin/id -u "$CURRENT_USER" 2>/dev/null || true)
+
+      if [[ -n "$CURRENT_USER" && "$CURRENT_USER" != "root" && -n "$CURRENT_UID" ]]; then
+      	echo "Attempting to bootout LaunchAgent for user ${CURRENT_USER}..."
+      	if /bin/launchctl bootout "gui/${CURRENT_UID}/${LABEL}" 2>/dev/null; then
+      		echo "Successfully booted out LaunchAgent."
+      	else
+      		echo "No running LaunchAgent or insufficient permissions; continuing..."
+      	fi
+      else
+      	echo "No active user session; skipping LaunchAgent bootout."
+      fi
+
+      echo "Removing LaunchAgent plist..."
+      /bin/rm -f "$PLIST_PATH" || true
+
+      echo "Removing binaries and support files..."
+      /bin/rm -rf /opt/geordie || true
+
+      echo "Removing keychain entry for instance '${INSTANCE_NAME}'..."
+      /usr/bin/security delete-generic-password -a "$AGENT_USER" -s "geordie-api-${INSTANCE_NAME}" "$KEYCHAIN_PATH" 2>/dev/null || true
+
+      echo "Uninstallation complete."
+      exit 0
+
+    version_script: |
+      #!/bin/sh
+      /opt/geordie/bin/geordie-endpoint-scanner --version | /usr/bin/grep -Eo 'geordie-cli/[0-9]+\.[0-9]+\.[0-9]+' | /usr/bin/cut -d/ -f2
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      flat_pkg_path: "%pathname%"
+      purge_destination: true
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/payload/'
+      pkg_payload_path: '%RECIPE_CACHE_DIR%/unpack/Payload'
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      installs_item_paths:
+        - /opt/geordie/bin/geordie-endpoint-scanner
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/payload"
+        - "%RECIPE_CACHE_DIR%/unpack"

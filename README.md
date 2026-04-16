@@ -51,6 +51,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### FullStory, Inc.
 * [gRPCurl](https://github.com/fullstorydev/grpcurl)
 
+### Geordie AI LTD
+* [Geordie Endpoint Scanner](https://www.geordie.ai/)
+
 ### Google
 * [Android Studio](https://developer.android.com/studio)
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)

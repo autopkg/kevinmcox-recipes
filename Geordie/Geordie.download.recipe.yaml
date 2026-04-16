@@ -1,0 +1,23 @@
+Description: Downloads the latest version of Geordie (https://www.geordie.ai). Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.Geordie
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Geordie
+  ARCH: arm64
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      filename: "geordie-%ARCH%.pkg"
+      url: "https://releases.global.geordie.ai/geordie-endpoint-scanner/latest/apple-%ARCH%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - 'Developer ID Installer: Geordie AI LTD (9T246FTU6T)'
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: '%pathname%'

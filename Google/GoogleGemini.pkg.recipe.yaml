@@ -1,0 +1,12 @@
+Description: "Downloads the latest version of Google Gemini and creates a package."
+Identifier: com.github.kevinmcox.pkg.GoogleGemini
+ParentRecipe: com.github.kevinmcox.download.GoogleGemini
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: GoogleGemini
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      pkg_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg'

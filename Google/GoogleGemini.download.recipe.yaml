@@ -1,0 +1,26 @@
+Description: "Downloads the latest version of Google Gemini."
+Identifier: com.github.kevinmcox.download.GoogleGemini
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: GoogleGemini
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      url: "https://dl.google.com/release2/j33ro/release/Gemini.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: '%pathname%/Gemini.app'
+      requirement: >-
+        identifier "com.google.GeminiMacOS" and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = EQHXZ8M8AV
+
+  - Processor: AppDmgVersioner
+    Arguments:
+      dmg_path: '%pathname%'

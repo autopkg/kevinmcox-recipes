@@ -56,6 +56,7 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 
 ### Google
 * [Android Studio](https://developer.android.com/studio)
+* [Gemini](https://gemini.google/mac)
 * [Google Endpoint Verification Helper](https://support.google.com/a/answer/9007320#zippy=%2Cstep-if-necessary-install-the-helper-app-mac-windows-and-linux-only)
 
 ### Gravitational Inc.

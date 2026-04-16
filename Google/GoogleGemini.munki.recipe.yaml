@@ -1,0 +1,27 @@
+Description: "Downloads the latest version of Google Gemini and imports it into Munki."
+Identifier: com.github.kevinmcox.munki.GoogleGemini
+ParentRecipe: com.github.kevinmcox.download.GoogleGemini
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: GoogleGemini
+  MUNKI_REPO_SUBDIR: Google/Gemini
+
+  pkginfo:
+    catalogs:
+    - testing
+    category: Utilities
+    description: "Access Gemini from any screen on your desktop to clarify a topic, recall a formula, or brainstorm on the fly without opening a tab. It’s help on demand."
+    developer: Google
+    display_name: Google Gemini
+    icon_name: '%NAME%.png'
+    name: '%NAME%'
+    unattended_install: true
+    unattended_uninstall: true
+    uninstallable: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pathname%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

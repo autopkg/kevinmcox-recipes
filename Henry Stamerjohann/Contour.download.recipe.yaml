@@ -1,0 +1,24 @@
+Description: Downloads the Contour (https://github.com/headmin/contour) package.
+Identifier: com.github.kevinmcox.download.Contour
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Contour
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      github_repo: headmin/contour
+      asset_regex: 'contour-.*pkg'
+
+  - Processor: URLDownloader
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - 'Developer ID Installer: Declarative IT GmbH (D6G4X4D7C9)'
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: "%pathname%"

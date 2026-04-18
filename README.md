@@ -64,6 +64,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 * [Teleport Connect](https://goteleport.com)
 * [tsh](https://goteleport.com)
 
+### Henry Stamerjohann
+* [Contour](https://github.com/headmin/contour)
+
 ### Jordan Baird
 * [Ice](https://github.com/jordanbaird/Ice) menu bar manager
 

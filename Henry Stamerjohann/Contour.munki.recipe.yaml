@@ -1,0 +1,57 @@
+Description: Downloads the Contour (https://github.com/headmin/contour) package and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.Contour
+ParentRecipe: com.github.kevinmcox.download.Contour
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Contour
+  MUNKI_REPO_SUBDIR: "Contour"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: "The Swiss Army Knife for Apple Device Management tasks. One signed binary that makes modern device management simpler: it normalizes configs consistently and surfaces errors clearly so outcomes diff cleanly. Whether you, your mdm vendor, or an agent wrote them, Contour supports profiles, DDM, Santa, PPPC, mSCP, osquery, BTM, and notification payloads. Prepare artifacts for MDM migration and GitOps workflows from the Terminal, in CI, or via an AI agent. Two modes, same core — every artifact is validated against the embedded Apple schema."
+    developer: "Henry Stamerjohann"
+    display_name: "Contour"
+    icon_name: "Contour.png"
+    minimum_os_version: "11.0"
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/contour --version | /usr/bin/grep -oE '[0-9]+\.[0-9]+\.[0-9]+'
+
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/unpack'
+      flat_pkg_path: '%pathname%'
+      purge_destination: true
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/payload'
+      pkg_payload_path: '%RECIPE_CACHE_DIR%/unpack/Payload'
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/payload'
+      installs_item_paths:
+        - /usr/local/bin/contour
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/payload/'
+        - '%RECIPE_CACHE_DIR%/unpack'

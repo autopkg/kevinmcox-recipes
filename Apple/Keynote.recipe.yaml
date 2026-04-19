@@ -1,0 +1,66 @@
+Description: Imports a Mac App Store (MAS) install of Numbers into Munki. This is designed to simplify manual imports, not automatically download from the MAS or be run in ephemeral CI/CD setups.
+Identifier: com.github.kevinmcox.munki.Keynote
+MinimumVersion: "2.9.0"
+
+Input:
+  APP: "Keynote Creator Studio.app"
+  NAME: Keynote
+  MUNKI_REPO_SUBDIR: Apple/Keynote
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Productivity
+    description: "With its powerful tools and dazzling effects, Keynote makes it easy to create stunning and memorable presentations."
+    developer: Apple
+    display_name: "%NAME%"
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+
+Process:
+  - Processor: Copier
+    Arguments:
+      source_path: '/Applications/%APP%'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%/%APP%'
+      overwrite: true
+
+  - Processor: VariableSetter
+    Arguments:
+      pathname: '%RECIPE_CACHE_DIR%/%NAME%/%APP%'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: '%pathname%'
+      requirement: >
+        (anchor apple generic and certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or
+        anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = JCRTNEU7GK) and
+        identifier "com.apple.Keynote"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: '%pathname%/Contents/Info.plist'
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%pathname%/Contents/_MASReceipt'
+
+  - Processor: DmgCreator
+    Arguments:
+      dmg_root: '%RECIPE_CACHE_DIR%/%NAME%'
+      dmg_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg'
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg'
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%pathname%'

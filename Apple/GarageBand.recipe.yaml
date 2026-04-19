@@ -1,0 +1,66 @@
+Description: Imports a Mac App Store (MAS) install of Garage Band into Munki. This is designed to simplify manual imports, not automatically download from the MAS or be run in ephemeral CI/CD setups.
+Identifier: com.github.kevinmcox.munki.GarageBand
+MinimumVersion: "2.9.0"
+
+Input:
+  APP: "GarageBand.app"
+  NAME: GarageBand
+  MUNKI_REPO_SUBDIR: Apple/GarageBand
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Productivity
+    description: "GarageBand is a fully equipped music creation studio right inside your Mac — with a complete sound library that includes instruments, presets for guitar and voice, and an incredible selection of session drummers and percussionists. With an intuitive, modern design, it’s easy to learn, play, record, create, and share your hits worldwide. Now you’re ready to make music like a pro."
+    developer: Apple
+    display_name: "%NAME%"
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+
+Process:
+  - Processor: Copier
+    Arguments:
+      source_path: '/Applications/%APP%'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%/%APP%'
+      overwrite: true
+
+  - Processor: VariableSetter
+    Arguments:
+      pathname: '%RECIPE_CACHE_DIR%/%NAME%/%APP%'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: '%pathname%'
+      requirement: >
+        (anchor apple generic and certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or
+        anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = F3LWYJ7GM7) and
+        identifier "com.apple.garageband10"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: '%pathname%/Contents/Info.plist'
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%pathname%/Contents/_MASReceipt'
+
+  - Processor: DmgCreator
+    Arguments:
+      dmg_root: '%RECIPE_CACHE_DIR%/%NAME%'
+      dmg_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg'
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg'
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%pathname%'

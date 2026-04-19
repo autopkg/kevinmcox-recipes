@@ -21,7 +21,11 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Apple, Inc.
 * Command Line Tools for Xcode (This recipe requires a pre-downloaded package to be passed to it at runtime.)
 * [Container](https://github.com/apple/container)
+* GarageBand (This recipe requires an existing installation via the Mac App Store)
+* Keynote (This recipe requires an existing installation via the Mac App Store)
 * Mac Evaluation Utility (This recipe requires a pre-downloaded package to be passed to it at runtime.)
+* Numbers (This recipe requires an existing installation via the Mac App Store)
+* Pages (This recipe requires an existing installation via the Mac App Store)
 
 ### Armin Briegel (Scripting OS X)
 * [prefs](https://github.com/scriptingosx/swift-prefs)

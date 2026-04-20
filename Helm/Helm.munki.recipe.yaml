@@ -1,0 +1,46 @@
+Description: Downloads the latest version of Helm CLI, creates a package and imports into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.Helm
+ParentRecipe: com.github.kevinmcox.pkg.Helm
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Helm
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: "Helm/%ARCH%"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: "Helm is a tool for managing Charts. Charts are packages of pre-configured Kubernetes resources."
+    developer: Cloud Native Computing Foundation
+    display_name: Helm
+    minimum_os_version: "12.0"
+    icon_name: Helm.png
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |-
+      #!/bin/sh
+      /usr/local/bin/helm version | /usr/bin/grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | /usr/bin/sed 's/^v//'
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/helm
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+      pkg_path: "%pkg_path%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

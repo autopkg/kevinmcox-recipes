@@ -68,6 +68,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 * [Teleport Connect](https://goteleport.com)
 * [tsh](https://goteleport.com)
 
+### Helm
+- [Helm](https://helm.sh)
+
 ### Henry Stamerjohann
 * [Contour](https://github.com/headmin/contour)
 

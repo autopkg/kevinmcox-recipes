@@ -1,0 +1,32 @@
+Description: Downloads the latest version of the Helm CLI. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.Helm
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Helm
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: amd64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      url: https://github.com/helm/helm/releases
+      re_pattern: '<a href="(?P<url>https://get.helm.sh/helm-v(?P<version>[0-9\.]*)-darwin-%DOWNLOAD_ARCH%.tar.gz)".*>MacOS %DOWNLOAD_ARCH%</a>\s*\(.*/\s*(?P<checksum>[a-f0-9]*)\)'
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: Helm.tar.gz
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: io.github.hjuutilainen.SharedProcessors/ChecksumVerifier
+    Arguments:
+      checksum_pathname: "%pathname%"
+      checksum: "%checksum%"
+      algorithm: SHA256

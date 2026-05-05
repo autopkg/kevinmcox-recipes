@@ -18,7 +18,7 @@ Process:
   - Processor: CodeSignatureVerifier
     Arguments:
       expected_authority_names:
-        - 'Developer ID Installer: Declarative IT GmbH (D6G4X4D7C9)'
+        - 'Developer ID Installer: Mac Admins Open Source (T4SK8ZXCXG)'
         - Developer ID Certification Authority
         - Apple Root CA
       input_path: "%pathname%"

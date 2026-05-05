@@ -1,0 +1,24 @@
+Description: "Downloads the latest version of Google Workspace CLI (gws) from https://github.com/googleworkspace/cli."
+Identifier: com.github.kevinmcox.download.GoogleWorkspaceCLI
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: GoogleWorkspaceCLI
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: arm64
+      input_string: "%ARCH%"
+      replace: aarch64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: '^google-workspace-cli-%DOWNLOAD_ARCH%-apple-darwin\.tar\.gz$'
+      github_repo: googleworkspace/cli
+
+  - Processor: URLDownloader
+
+  - Processor: EndOfCheckPhase

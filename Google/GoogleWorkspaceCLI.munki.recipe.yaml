@@ -1,0 +1,52 @@
+Description: "Downloads the latest version of Google Workspace CLI (gws) from https://github.com/googleworkspace/cli, builds a package and imports it into Munki."
+Identifier: com.github.kevinmcox.munki.GoogleWorkspaceCLI
+ParentRecipe: com.github.kevinmcox.pkg.GoogleWorkspaceCLI
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: GoogleWorkspaceCLI
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: Google/WorkspaceCLI
+
+  pkginfo:
+    catalogs:
+    - testing
+    category: Utilities
+    description: |
+      One CLI for all of Google Workspace — built for humans and AI agents.
+
+      Drive, Gmail, Calendar, and every Workspace API. Zero boilerplate. Structured JSON output. 40+ agent skills included.
+
+      NOTE: This is not an officially supported Google product.
+    developer: Google
+    display_name: Google Workspace CLI (gws)
+    icon_name: "%NAME%.png"
+    minimum_os_version: "11.0"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    uninstallable: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/gws --version | /usr/bin/grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/gws
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

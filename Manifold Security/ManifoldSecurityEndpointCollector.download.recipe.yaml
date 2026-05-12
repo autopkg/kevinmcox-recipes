@@ -1,0 +1,45 @@
+Description: Downloads the latest version of Manifold Security Endpoint Collector. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.ManifoldSecurityEndpointCollector
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ManifoldSecurityEndpointCollector
+  ARCH: arm64
+  CHANNEL: stable
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: amd64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '\b([0-9]+\.[0-9]+\.[0-9]+)\b'
+      result_output_var_name: "version"
+      url: 'https://downloads.manifoldsecurity.io/endpoint-collector/%CHANNEL%/version.txt'
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "ManifoldSecurityEndpointCollector-%ARCH%-%version%.zip"
+      url: "https://downloads.manifoldsecurity.io/endpoint-collector/%CHANNEL%/endpoint-collector_darwin_%DOWNLOAD_ARCH%.zip"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: Unarchiver
+    Arguments:
+      archive_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/unpack/manifold-endpoint-collector"
+      requirement: >
+        identifier "com.manifoldsecurity.manifold-endpoint-collector" and
+        anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = PGSCHLSKQ4

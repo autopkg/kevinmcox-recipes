@@ -87,6 +87,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Manaflow
 * [cmux](https://www.cmux.dev)
 
+### Manifold Security
+* [Endpoint Collector](https://www.manifold.security)
+
 ### Meta Platforms, Inc.
 * [dotslash](https://dotslash-cli.com/)
 

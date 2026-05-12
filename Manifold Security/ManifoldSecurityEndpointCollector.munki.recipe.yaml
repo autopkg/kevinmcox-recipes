@@ -1,0 +1,80 @@
+Description: Downloads the latest version of Manifold Security Endpoint Collector. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.ManifoldSecurityEndpointCollector
+ParentRecipe: com.github.kevinmcox.pkg.ManifoldSecurityEndpointCollector
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ManifoldSecurityEndpointCollector
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: "ManifoldSecurity/endpoint-collector/%ARCH%"
+  APIKEY: "{key}"
+  ENDPOINT: "https://{domain}"
+  SETUP_OPTIONS: "--mode mcp --mode hooks" #EXAMPLE! Consult Manifold documentation for your specific setup options
+
+  pkginfo:
+    catalogs:
+      - "testing"
+    category: "Management"
+    description: "The Endpoint Collector is a lightweight CLI utility, not a background agent, installed on developer machines. It runs only when triggered: invoked by tool hooks on each AI coding event, or executed by MDM-scheduled jobs to scrape conversation history. It does not run persistently or monitor activity on its own."
+    developer: "Manifold Security"
+    display_name: "Manifold Security Endpoint Collector"
+    icon_name: "%NAME%.png"
+    minimum_os_version: "13.0"
+    name: "%NAME%"
+    postinstall_script: |
+      #!/bin/sh
+
+      currentUser=$(echo "show State:/Users/ConsoleUser" | /usr/sbin/scutil | /usr/bin/awk '/Name :/ && ! /loginwindow/ { print $3 }')
+
+      if [ -z "$currentUser" ]; then
+      	echo "No user logged in, can not complete setup..."
+      	exit 1
+      fi
+
+      uid=$(/usr/bin/id -u "$currentUser")
+
+      runAsUser() {
+      /bin/launchctl asuser "$uid" /usr/bin/sudo -H -u "$currentUser" "$@"
+      }
+
+      runAsUser /usr/local/bin/manifold-endpoint-collector setup --api-key "%APIKEY%" --endpoint "%ENDPOINT%" %SETUP_OPTIONS%
+    preinstall_script: |
+      #!/bin/sh
+      currentUser=$(echo "show State:/Users/ConsoleUser" | /usr/sbin/scutil | /usr/bin/awk '/Name :/ && ! /loginwindow/ { print $3 }')
+      if [ -z "$currentUser" ]; then
+      	echo "No user logged in, skipping install..."
+      	exit 1
+      fi
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    uninstallable: true
+    uninstall_method: uninstall_script
+    uninstall_script: |
+      #!/bin/sh
+      /usr/local/bin/manifold-endpoint-collector remove
+      /bin/rm -f /usr/local/bin/manifold-endpoint-collector
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/manifold-endpoint-collector --version | /usr/bin/grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
+
+Process:
+  - Processor: "MunkiInstallsItemsCreator"
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - "/usr/local/bin/manifold-endpoint-collector"
+
+  - Processor: "MunkiPkginfoMerger"
+
+  - Processor: "MunkiImporter"
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: "PathDeleter"
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"
+        - "%RECIPE_CACHE_DIR%/unpack"

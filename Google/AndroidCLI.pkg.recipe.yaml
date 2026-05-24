@@ -1,0 +1,34 @@
+Description: "Downloads the latest version of Android CLI from https://developer.android.com/tools/agents/android-cli and builds a package."
+Identifier: com.github.kevinmcox.pkg.AndroidCLI
+ParentRecipe: com.github.kevinmcox.download.AndroidCLI
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AndroidCLI
+  ARCH: arm64
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        usr/local/bin: "0755"
+
+  - Processor: FileMover
+    Arguments:
+      source: "%pathname%"
+      target: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/bin/android"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgname: "%NAME%-%ARCH%-%version%"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        id: com.google.androidcli
+        version: "%version%"
+        chown:
+          - path: usr/local/bin/android
+            user: root
+            group: wheel
+            mode: "0755"

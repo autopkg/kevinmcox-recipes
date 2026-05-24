@@ -1,0 +1,72 @@
+Description: "Downloads the latest version of Android CLI from https://developer.android.com/tools/agents/android-cli, builds a package and imports it into Munki."
+Identifier: com.github.kevinmcox.munki.AndroidCLI
+ParentRecipe: com.github.kevinmcox.pkg.AndroidCLI
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AndroidCLI
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: Google/AndroidCLI/%ARCH%
+
+  pkginfo:
+    catalogs:
+    - testing
+    category: Developer Tools
+    description: |
+      Android CLI is the official command-line tool for Android development with built-in AI assistance.
+    developer: Google
+    display_name: Android CLI
+    icon_name: "%NAME%.png"
+    minimum_os_version: "12.0"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    uninstallable: true
+    version_script: |
+      #!/bin/sh
+      /usr/bin/grep -aoE 'version=[0-9]+\.[0-9]+\.[0-9]+' /usr/local/bin/android | /usr/bin/head -1 | /usr/bin/cut -d= -f2
+    postinstall_script: |
+      #!/bin/sh
+      # Refresh the Android CLI launcher in the console user's ~/.android so it
+      # matches the stub we just installed at /usr/local/bin/android. If no GUI
+      # user is logged in, skip — that user will bootstrap themselves on first
+      # invocation. The Android SDK terms of service is deferred to the user's
+      # first explicit invocation of `android`.
+
+      currentUser=$(/bin/echo "show State:/Users/ConsoleUser" | /usr/sbin/scutil | /usr/bin/awk '/Name :/ && ! /loginwindow/ { print $3 }')
+
+      if [ -z "$currentUser" ]; then
+          /bin/echo "No interactive console user; skipping Android CLI launcher refresh."
+          exit 0
+      fi
+
+      uid=$(/usr/bin/id -u "$currentUser")
+
+      runAsUser() {
+          /bin/launchctl asuser "$uid" /usr/bin/sudo -H -u "$currentUser" "$@"
+      }
+
+      runAsUser /usr/bin/env ANDROID_CLI_FRESH_INSTALL=1 /usr/local/bin/android || true
+
+      exit 0
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/android
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

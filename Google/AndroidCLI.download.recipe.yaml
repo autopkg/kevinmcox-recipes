@@ -1,0 +1,36 @@
+Description: |
+  Downloads the latest version of Android CLI from
+  https://developer.android.com/tools/agents/android-cli.
+
+  Version is extracted from Google's Debian apt repo Packages metadata,
+  which is updated in lockstep with the bare binaries at /latest/. Google
+  does not publish a versioned URL or per-platform metadata file for the
+  macOS build, so the apt repo is the cleanest vendor-blessed version
+  source.
+
+  The macOS binary itself is ad-hoc signed by Google (no Developer ID,
+  no Team ID), so CodeSignatureVerifier is intentionally omitted — trust
+  is rooted in HTTPS to dl.google.com, the same trust model the vendor's
+  curl-to-bash installer, Homebrew cask, and apt repo all rely on.
+
+  Defaults to the Apple Silicon (arm64) build. Override ARCH to "x86_64"
+  for the Intel build.
+Identifier: com.github.kevinmcox.download.AndroidCLI
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AndroidCLI
+  ARCH: arm64
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      url: https://dl.google.com/android/cli/latest/debian/dists/stable/main/binary-amd64/Packages
+      re_pattern: '(?m)^Version: (?P<version>\S+)$'
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "https://dl.google.com/android/cli/latest/darwin_%ARCH%/android"
+      filename: "android"
+
+  - Processor: EndOfCheckPhase

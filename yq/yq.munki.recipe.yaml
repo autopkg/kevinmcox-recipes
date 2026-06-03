@@ -1,0 +1,46 @@
+Description: Downloads, packages and imports the latest version of yq (https://github.com/mikefarah/yq) into Munki. Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.yq
+ParentRecipe: com.github.kevinmcox.pkg.yq
+MinimumVersion: "2.7.6"
+
+Input:
+  NAME: yq
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: "Utilities/%NAME%/%ARCH%"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: "yq is a lightweight and portable command-line YAML processor. yq uses jq like syntax but works with yaml files as well as json."
+    developer: Mike Farah
+    display_name: yq
+    icon_name: "yq.png"
+    minimum_os_version: "12.0"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |-
+      #!/bin/sh
+      /usr/local/bin/yq --version | /usr/bin/grep -oE '[0-9]+(\.[0-9]+)+'
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/yq
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+      pkg_path: "%pkg_path%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

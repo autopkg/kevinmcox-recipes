@@ -96,6 +96,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Micromat, Inc.
 * [MachineProfile](https://www.micromat.com/products/machineprofile)
 
+### Mike Farah
+* [yq](https://github.com/mikefarah/yq)
+
 ### Mimestream
 * [Mimestream](https://mimestream.com)
 

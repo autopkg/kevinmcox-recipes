@@ -1,0 +1,28 @@
+Description: Downloads yq (https://github.com/mikefarah/yq). Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.yq
+MinimumVersion: "2.7.6"
+
+Input:
+  NAME: yq
+  ARCH: arm64
+  INCLUDE_PRERELEASES: ""
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: amd64
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: yq_darwin_%DOWNLOAD_ARCH%.tar.gz
+      github_repo: mikefarah/yq
+      include_prereleases: "%INCLUDE_PRERELEASES%"
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%ARCH%.tar.gz"
+
+  - Processor: EndOfCheckPhase

@@ -1,0 +1,53 @@
+Description: Downloads and packages the latest version of yq (https://github.com/mikefarah/yq). Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.pkg.yq
+ParentRecipe: com.github.kevinmcox.download.yq
+MinimumVersion: "2.7.6"
+
+Input:
+  NAME: yq
+  ARCH: arm64
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        usr/local/bin: "0775"
+        usr/local/share/man/man1: "0755"
+
+  - Processor: Unarchiver
+    Arguments:
+      archive_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: FileMover
+    Arguments:
+      source: "%RECIPE_CACHE_DIR%/unpack/yq_darwin_%DOWNLOAD_ARCH%"
+      target: "%pkgroot%/usr/local/bin/yq"
+
+  - Processor: FileMover
+    Arguments:
+      source: "%RECIPE_CACHE_DIR%/unpack/yq.1"
+      target: "%pkgroot%/usr/local/share/man/man1/yq.1"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        id: com.github.mikefarah.yq
+        pkgname: "%NAME%-%ARCH%-%version%"
+        version: "%version%"
+        chown:
+          - path: usr/local/bin/yq
+            user: root
+            group: wheel
+            mode: "0755"
+          - path: usr/local/share/man/man1/yq.1
+            user: root
+            group: wheel
+            mode: "0644"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/unpack"

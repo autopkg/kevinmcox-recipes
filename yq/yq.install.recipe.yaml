@@ -1,0 +1,11 @@
+Description: Downloads, packages and installs the latest version of yq (https://github.com/mikefarah/yq). Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.install.yq
+ParentRecipe: com.github.kevinmcox.pkg.yq
+MinimumVersion: "2.7.6"
+
+Input:
+  NAME: yq
+  ARCH: arm64
+
+Process:
+  - Processor: Installer

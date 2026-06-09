@@ -21,7 +21,7 @@ Process:
   - Processor: CodeSignatureVerifier
     Arguments:
       input_path: "%pathname%"
-      requirement:
+      expected_authority_names:
         - "Developer ID Installer: Anthropic PBC (Q6L2SF6YDW)"
         - "Developer ID Certification Authority"
         - "Apple Root CA"

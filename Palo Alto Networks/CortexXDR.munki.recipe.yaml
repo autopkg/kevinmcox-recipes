@@ -1,0 +1,90 @@
+Description: |
+  Imports a manually downloaded Cortex XDR installer into Munki.
+
+  Cortex XDR requires its Config.xml file to be located in the same directory as "Cortex XDR.pkg" at install time (https://github.com/munki/munki/wiki/Cortex-XDR), so a plain pkg import will not work.
+
+  This recipe unzips the vendor download and wraps it in a read-only DMG, which keeps Config.xml co-located with the installer when Munki mounts the disk image to install.
+
+  REQUIRED: The .zip generated from the Cortex XDR dashboard (Endpoints > Agent Installations), supplied with the -p (or --pkg) option.
+
+  EXAMPLE: autopkg run CortexXDR.munki.recipe.yaml -p "Cortex XDR.zip"
+
+Identifier: com.github.kevinmcox.munki.CortexXDR
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: CortexXDR
+  MUNKI_REPO_SUBDIR: PaloAltoNetworks/CortexXDR
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Security
+    description: "Cortex XDR helps protect your Mac from malware, unauthorized access, and other security threats. It works silently in the background to keep your system safe, without interrupting your work."
+    developer: Palo Alto Networks
+    display_name: Cortex XDR
+    icon_name: CortexXDR.png
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: PackageRequired
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "null"
+
+  - Processor: Unarchiver
+    Arguments:
+      archive_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/dmgroot"
+      purge_destination: true
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/dmgroot/Cortex XDR.pkg"
+      expected_authority_names:
+        - "Developer ID Installer: Palo Alto Networks (PXPZ95SK77)"
+        - Developer ID Certification Authority
+        - Apple Root CA
+
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%RECIPE_CACHE_DIR%/dmgroot/Cortex XDR.pkg"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/unpack/com.paloaltonetworks.cortex.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/payload"
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      derive_minimum_os_version: true
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      installs_item_paths:
+        - /Applications/Cortex XDR.app
+        - /Library/Application Support/PaloAltoNetworks/Traps/bin/Cortex XDR Agent.app
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: DmgCreator
+    Arguments:
+      dmg_root: "%RECIPE_CACHE_DIR%/dmgroot"
+      dmg_path: "%RECIPE_CACHE_DIR%/%NAME%.dmg"
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%.dmg"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/dmgroot"
+        - "%RECIPE_CACHE_DIR%/payload"
+        - "%RECIPE_CACHE_DIR%/unpack"
+        - "%RECIPE_CACHE_DIR%/%NAME%.dmg"

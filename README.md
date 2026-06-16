@@ -112,6 +112,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### One Minute Games
 * [DevCleaner for Xcode](https://github.com/vashpan/xcode-dev-cleaner)
 
+### Palo Alto Networks
+* [Cortex XDR](https://www.paloaltonetworks.com/cortex/cortex-xdr) (This recipe requires a pre-downloaded ZIP to be passed to it at runtime.)
+
 ### Rafael Conde
 * [HiDock](https://hidock.app)
 

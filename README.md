@@ -133,3 +133,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 
 ### Yuji Tachikawa (yujitach)
 * [MenuMeters](https://member.ipmu.jp/yuji.tachikawa/MenuMetersElCapitan/)
+
+## Shared Processors
+
+This repo also includes shared processors in [`SharedProcessors/`](SharedProcessors/) that other recipes (including those in other repos) can use:
+
+* [GitHubMonorepoReleasesInfoProvider](SharedProcessors/README.md) — like the core `GitHubReleasesInfoProvider`, but targets a single component in a monorepo that uses per-component tag prefixes (e.g. `cli/v1.4.2`), and derives a clean version from the prefixed tag.

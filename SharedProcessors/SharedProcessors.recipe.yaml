@@ -1,0 +1,10 @@
+Description: |
+  Stub recipe to locate the shared processors in this directory. Reference a
+  processor by prefixing this identifier to its name, e.g.:
+  com.github.kevinmcox.SharedProcessors/GitHubMonorepoReleasesInfoProvider
+Identifier: com.github.kevinmcox.SharedProcessors
+MinimumVersion: "2.3"
+
+Input: {}
+
+Process: []

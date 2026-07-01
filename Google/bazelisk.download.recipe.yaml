@@ -1,0 +1,18 @@
+Description: Downloads the latest version of Bazelisk (https://github.com/bazelbuild/bazelisk).
+Identifier: com.github.kevinmcox.download.bazelisk
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: bazelisk
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      github_repo: bazelbuild/bazelisk
+      asset_regex: ^bazelisk-darwin$
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%"
+
+  - Processor: EndOfCheckPhase

@@ -1,0 +1,38 @@
+Description: Downloads, packages and imports the latest version of Bazelisk (https://github.com/bazelbuild/bazelisk) into Munki. Installs to /usr/local/bin/bazelisk.
+Identifier: com.github.kevinmcox.munki.bazelisk
+ParentRecipe: com.github.kevinmcox.pkg.bazelisk
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: bazelisk
+  MUNKI_REPO_SUBDIR: "Utilities/%NAME%"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: "Bazelisk is a wrapper for Bazel written in Go. It automatically picks a good version of Bazel given your current working directory, downloads it from the official server (if required) and then transparently passes through all command-line arguments to the real Bazel binary. You can call it just like you would call Bazel."
+    developer: Google
+    display_name: Bazelisk
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/pkgroot"
+      installs_item_paths:
+        - /usr/local/bin/bazelisk
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pkg_path%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/pkgroot"

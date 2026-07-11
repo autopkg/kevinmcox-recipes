@@ -91,6 +91,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Manifold Security
 * [Endpoint Collector](https://www.manifold.security)
 
+### Max Goedjen
+* [Secretive](https://github.com/maxgoedjen/secretive)
+
 ### Meta Platforms, Inc.
 * [dotslash](https://dotslash-cli.com/)
 

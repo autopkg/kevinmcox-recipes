@@ -1,0 +1,30 @@
+Description: Downloads the latest version of the Bitrise desktop app (https://github.com/bitrise-io/bitrise-desktop-app).
+Identifier: com.github.kevinmcox.download.Bitrise
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Bitrise
+  INCLUDE_PRERELEASES: ""
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      github_repo: bitrise-io/bitrise-desktop-app
+      asset_regex: ^Bitrise-.*\.dmg$
+      include_prereleases: "%INCLUDE_PRERELEASES%"
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%version%.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%/Bitrise.app"
+      requirement: >-
+        identifier "io.bitrise.BitriseMenuBar" and
+        anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = "DT2C2FZ7U2"

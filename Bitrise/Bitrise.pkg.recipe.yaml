@@ -1,0 +1,10 @@
+Description: Downloads the latest version of the Bitrise desktop app (https://github.com/bitrise-io/bitrise-desktop-app) and builds a package.
+Identifier: com.github.kevinmcox.pkg.Bitrise
+ParentRecipe: com.github.kevinmcox.download.Bitrise
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Bitrise
+
+Process:
+  - Processor: AppPkgCreator

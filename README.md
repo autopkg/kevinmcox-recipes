@@ -33,6 +33,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Bart Reardon
 * [WallpaperFolderManager](https://github.com/bartreardon/WallpaperFolderManager)
 
+### Bitrise
+* [Bitrise Desktop App](https://github.com/bitrise-io/bitrise-desktop-app)
+
 ### Camera Bits, Inc.
 * [Photo Mechanic](https://www.camerabits.com)
 

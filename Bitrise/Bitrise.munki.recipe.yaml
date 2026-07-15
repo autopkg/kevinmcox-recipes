@@ -1,0 +1,26 @@
+Description: Downloads the latest version of the Bitrise desktop app (https://github.com/bitrise-io/bitrise-desktop-app) and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.Bitrise
+ParentRecipe: com.github.kevinmcox.download.Bitrise
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Bitrise
+  MUNKI_REPO_SUBDIR: Bitrise
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: Menu bar app that keeps your Bitrise CI build status one glance away.
+    developer: Bitrise
+    display_name: Bitrise
+    icon_name: Bitrise.png
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

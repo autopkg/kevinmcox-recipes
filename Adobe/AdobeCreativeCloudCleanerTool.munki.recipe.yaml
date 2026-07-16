@@ -14,7 +14,7 @@ Input:
     description: The Creative Cloud Cleaner Tool allows you to more precisely remove installation records for Creative Cloud or Creative Suite applications that may have become corrupted or may be causing problems with a new installation.
     developer: Adobe
     display_name: Adobe Creative Cloud Cleaner Tool
-    icon_name: "%NAME%.png"
+    icon_name: AdobeUtilities.png
     name: "%NAME%"
     unattended_install: true
     unattended_uninstall: true

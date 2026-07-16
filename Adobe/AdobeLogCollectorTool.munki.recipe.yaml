@@ -1,0 +1,26 @@
+Description: Downloads the latest version of Adobe Log Collector Tool and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.AdobeLogCollectorTool
+ParentRecipe: com.github.kevinmcox.download.AdobeLogCollectorTool
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AdobeLogCollectorTool
+  MUNKI_REPO_SUBDIR: Adobe/AdobeLogCollectorTool
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: Log Collector Tool to collect debug information related to your installed Adobe Creative Cloud apps. Log Collector Tool generates a signed ZXP file, which you are prompted to send to Adobe. Adobe uses the information contained in the ZXP file to identify bugs and to make improvements in Creative Cloud software products.
+    developer: Adobe
+    display_name: Adobe Log Collector Tool
+    icon_name: AdobeUtilities.png
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

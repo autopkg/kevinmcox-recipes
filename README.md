@@ -9,6 +9,10 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Addigy, Inc.
 * [MDM Watchdog](https://addigy.com/mdm-watchdog/)
 
+### Adobe
+* [Creative Cloud Cleaner Tool](https://helpx.adobe.com/creative-cloud/kb/cc-cleaner-tool-installation-problems.html)
+* [Creative Cloud Desktop](https://helpx.adobe.com/creative-cloud/help/download-creative-cloud-app.html)
+
 ### Amazon Web Services
 * [Amazon ECR Docker Credential Helper](https://github.com/awslabs/amazon-ecr-credential-helper)
 

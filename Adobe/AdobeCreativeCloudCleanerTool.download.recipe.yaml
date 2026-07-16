@@ -1,0 +1,28 @@
+Description: Downloads the latest version of Adobe Creative Cloud Cleaner Tool.
+Identifier: com.github.kevinmcox.download.AdobeCreativeCloudCleanerTool
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AdobeCreativeCloudCleanerTool
+  DOWNLOAD_URL: https://swupmf.adobe.com/webfeed/CleanerTool/mac/AdobeCreativeCloudCleanerTool.dmg
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      url: "%DOWNLOAD_URL%"
+      filename: "%NAME%.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%/Adobe Creative Cloud Cleaner Tool.app"
+      requirement: >-
+        identifier "com.Adobe.Installers.AdobeCreativeCloudCleanerTool" and
+        anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6]
+        /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13]
+        /* exists */ and certificate leaf[subject.OU] = JQ525L2MZD
+
+  - Processor: AppDmgVersioner
+    Arguments:
+      dmg_path: "%pathname%"

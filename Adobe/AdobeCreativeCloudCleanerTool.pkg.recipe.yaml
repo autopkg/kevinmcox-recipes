@@ -1,0 +1,12 @@
+Description: Downloads the latest version of Adobe Creative Cloud Cleaner Tool and creates a package.
+Identifier: com.github.kevinmcox.pkg.AdobeCreativeCloudCleanerTool
+ParentRecipe: com.github.kevinmcox.download.AdobeCreativeCloudCleanerTool
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AdobeCreativeCloudCleanerTool
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"

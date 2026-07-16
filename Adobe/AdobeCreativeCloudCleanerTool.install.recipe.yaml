@@ -1,0 +1,15 @@
+Description: Installs the latest version of Adobe Creative Cloud Cleaner Tool.
+Identifier: com.github.kevinmcox.install.AdobeCreativeCloudCleanerTool
+ParentRecipe: com.github.kevinmcox.download.AdobeCreativeCloudCleanerTool
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AdobeCreativeCloudCleanerTool
+
+Process:
+  - Processor: InstallFromDMG
+    Arguments:
+      dmg_path: "%pathname%"
+      items_to_copy:
+        - source_item: Adobe Creative Cloud Cleaner Tool.app
+          destination_path: /Applications

@@ -1,0 +1,26 @@
+Description: Downloads the latest version of Adobe Creative Cloud Cleaner Tool and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.AdobeCreativeCloudCleanerTool
+ParentRecipe: com.github.kevinmcox.download.AdobeCreativeCloudCleanerTool
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: AdobeCreativeCloudCleanerTool
+  MUNKI_REPO_SUBDIR: Adobe/AdobeCreativeCloudCleanerTool
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: The Creative Cloud Cleaner Tool allows you to more precisely remove installation records for Creative Cloud or Creative Suite applications that may have become corrupted or may be causing problems with a new installation.
+    developer: Adobe
+    display_name: Adobe Creative Cloud Cleaner Tool
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

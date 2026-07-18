@@ -1,0 +1,29 @@
+Description: >-
+  Downloads the latest version of the combined Swiftpkgr GUI app and swiftpkg CLI package (https://github.com/codecarton/swiftpkg).
+Identifier: com.github.kevinmcox.download.SwiftPkgr
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: SwiftPkgr
+  INCLUDE_PRERELEASES: ""
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      github_repo: codecarton/swiftpkg
+      asset_regex: ^swiftpkg-.*-combined\.pkg$
+      include_prereleases: "%INCLUDE_PRERELEASES%"
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%version%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      expected_authority_names:
+        - "Developer ID Installer: Code Carton, LLC (DPXY7JLK67)"
+        - Developer ID Certification Authority
+        - Apple Root CA

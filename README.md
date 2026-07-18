@@ -47,6 +47,9 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 ### Cirrus Labs
 * [Tart](https://tart.run)
 
+### Code Carton, LLC
+* [swiftpkg / Swiftpkgr](https://github.com/codecarton/swiftpkg)
+
 ### ConductorOne
 * [Cone](https://github.com/ConductorOne/cone)
 

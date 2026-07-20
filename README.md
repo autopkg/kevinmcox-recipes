@@ -87,6 +87,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Henry Stamerjohann
 * [Contour](https://github.com/headmin/contour)
 
+### Jeremy Bessard
+* [mysides-swift](https://github.com/jeremy4971/mysides-swift)
+
 ### Jordan Baird
 * [Ice](https://github.com/jordanbaird/Ice) menu bar manager
 

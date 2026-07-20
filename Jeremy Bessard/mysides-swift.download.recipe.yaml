@@ -1,0 +1,28 @@
+Description: Downloads the latest version of mysides, a command-line tool for managing macOS Finder sidebar favorites (https://github.com/jeremy4971/mysides-swift).
+Identifier: com.github.kevinmcox.download.mysides-swift
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: mysides-swift
+  INCLUDE_PRERELEASES: ""
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      github_repo: jeremy4971/mysides-swift
+      asset_regex: ^mysides-[0-9.]+\.pkg$
+      include_prereleases: "%INCLUDE_PRERELEASES%"
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%version%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      expected_authority_names:
+        - "Developer ID Installer: JEREMY BESSARD (73MS2PM6D7)"
+        - Developer ID Certification Authority
+        - Apple Root CA

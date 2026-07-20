@@ -1,0 +1,56 @@
+Description: >-
+  Downloads the latest version of mysides (https://github.com/jeremy4971/mysides-swift) and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.mysides-swift
+ParentRecipe: com.github.kevinmcox.download.mysides-swift
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: mysides-swift
+  MUNKI_REPO_SUBDIR: mysides-swift
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Management
+    description: mysides is a command-line tool for managing macOS Finder sidebar favorites (add, insert, remove, and list items), written in Swift.
+    developer: Jeremy Bessard
+    display_name: mysides
+    name: "%NAME%"
+    unattended_install: true
+    unattended_uninstall: true
+    version_script: |
+      #!/bin/sh
+      /usr/local/bin/mysides --version
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/unpack/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/payload/"
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      derive_minimum_os_version: true
+      installs_item_paths:
+        - /usr/local/bin/mysides
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/payload"
+        - "%RECIPE_CACHE_DIR%/unpack"

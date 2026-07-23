@@ -1,0 +1,29 @@
+Description: Downloads the latest version of Omnigent and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.Omnigent
+ParentRecipe: com.github.kevinmcox.download.Omnigent
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Omnigent
+  MUNKI_REPO_SUBDIR: Databricks/Omnigent
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: "A common layer over Claude Code, Codex, Pi, and the agents you write yourself: swap or combine harnesses without rewriting, keep them in check with policies and sandboxing, and collaborate in real time on the same live session, from any device."
+    developer: Databricks, Inc.
+    display_name: Omnigent
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    supported_architectures:
+      - arm64
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+
+  - Processor: "MunkiImporter"
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

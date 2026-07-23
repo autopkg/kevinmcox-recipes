@@ -1,0 +1,10 @@
+Description: Downloads the latest version of Omnigent and builds a package.
+Identifier: com.github.kevinmcox.pkg.Omnigent
+ParentRecipe: com.github.kevinmcox.download.Omnigent
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Omnigent
+
+Process:
+  - Processor: AppPkgCreator

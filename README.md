@@ -127,6 +127,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 ### Okta
 * [okta-aws-cli](https://github.com/okta/okta-aws-cli)
 
+### Omnigent
+* [Omnigent](https://omnigent.ai)
+
 ### One Minute Games
 * [DevCleaner for Xcode](https://github.com/vashpan/xcode-dev-cleaner)
 

@@ -1,0 +1,13 @@
+Description: Downloads the latest version of Cursor and creates a package. Set ARCH to universal, arm64, or x86_64.
+Identifier: com.github.kevinmcox.pkg.Cursor
+ParentRecipe: com.github.kevinmcox.download.Cursor
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Cursor
+  ARCH: universal
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%ARCH%-%version%.pkg"

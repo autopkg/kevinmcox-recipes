@@ -1,0 +1,53 @@
+Description: |
+  Downloads the latest version of Cursor.
+
+  Possible values for ARCH:
+  - universal (default)
+  - arm64
+  - x86_64
+
+  Possible values for RELEASETRACK:
+  - stable (default)
+  - latest
+Identifier: com.github.kevinmcox.download.Cursor
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Cursor
+  ARCH: universal
+  RELEASETRACK: stable
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: "-x86_64"
+      input_string: "darwin-%ARCH%"
+      replace: ""
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '"downloadUrl":"(https[^"]+\.dmg)"'
+      result_output_var_name: link
+      url: "https://api2.cursor.sh/updates/api/download/%RELEASETRACK%/%DOWNLOAD_ARCH%/cursor"
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%ARCH%.dmg"
+      url: "%link%"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%/Cursor.app"
+      requirement: >-
+        identifier "com.todesktop.230313mzl4w4u92" and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = VDXQ22DGB9
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%pathname%/Cursor.app/Contents/Info.plist"
+      plist_version_key: CFBundleShortVersionString

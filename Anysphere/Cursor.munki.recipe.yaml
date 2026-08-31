@@ -1,0 +1,29 @@
+Description: Downloads the latest version of Cursor and imports it into Munki. Set ARCH to universal, arm64, or x86_64.
+Identifier: com.github.kevinmcox.munki.Cursor
+ParentRecipe: com.github.kevinmcox.download.Cursor
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: Cursor
+  ARCH: universal
+  MUNKI_REPO_SUBDIR: "Anysphere/Cursor/%ARCH%"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: Built to make you extraordinarily productive, Cursor is the best way to code with AI.
+    developer: Anysphere, Inc.
+    display_name: Cursor
+    icon_name: Cursor.png
+    name: "%NAME%"
+    supported_architectures: # NOTE: If importing the universal build, delete this key entirely. Leave it when ARCH is set to arm64 or x86_64.
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

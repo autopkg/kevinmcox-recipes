@@ -21,6 +21,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 * [Claude Desktop](https://claude.com/download)
 
 ### Anysphere, Inc.
+* [Cursor](https://cursor.com)
 * [Cursor CLI](https://cursor.com/cli)
 
 ### Apple, Inc.

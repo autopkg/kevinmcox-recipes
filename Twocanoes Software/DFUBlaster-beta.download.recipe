@@ -21,9 +21,9 @@
 			<key>Arguments</key>
 			<dict>
 				<key>re_pattern</key>
-				<string>"href":\s*"([^"]+PreBeta-DFU_Blaster_Pro_Build-\d+_Version-[\d.]+\.dmg)"</string>
+				<string>"direct_asset_url":\s*"([^"]+PreBeta-DFU-Blaster-Pro_Build-\d+_Version-[\d.]+\.dmg)"</string>
 				<key>url</key>
-				<string>https://api.bitbucket.org/2.0/repositories/twocanoes/dfu-blaster-public/downloads</string>
+				<string>https://gitlab.com/api/v4/projects/twocanoes%2Fdfu-blaster-public/releases</string>
 			</dict>
 		</dict>
 		<dict>

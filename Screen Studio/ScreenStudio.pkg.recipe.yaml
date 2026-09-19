@@ -1,0 +1,14 @@
+Description: Downloads the latest version of Screen Studio and builds a package. Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.pkg.ScreenStudio
+ParentRecipe: com.github.kevinmcox.download.ScreenStudio
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ScreenStudio
+  ARCH: arm64
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      app_path: "%pathname%/*.app"
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%ARCH%-%version%.pkg"

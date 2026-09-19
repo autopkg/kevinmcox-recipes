@@ -1,0 +1,49 @@
+Description: Downloads the latest version of Screen Studio. Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.ScreenStudio
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ScreenStudio
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: arm64
+      input_string: "%ARCH%"
+      replace: Apple%20Silicon
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%DOWNLOAD_ARCH%"
+      replace: Intel
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: https://screenstudioassets.com/releases/[a-zA-Z0-9.-]+/Screen%20Studio%20[a-zA-Z0-9.-]+%20%DOWNLOAD_ARCH%.dmg
+      result_output_var_name: match
+      url: https://screen.studio/download
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%ARCH%.dmg"
+      url: "%match%"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%/Screen Studio.app"
+      requirement: >-
+        identifier "com.timpler.screenstudio" and anchor apple generic and
+        certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and
+        certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and
+        certificate leaf[subject.OU] = SXF593CX2N
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%pathname%/Screen Studio.app/Contents/Info.plist"
+      plist_version_key: CFBundleShortVersionString

@@ -1,0 +1,29 @@
+Description: Downloads the latest version of Screen Studio and imports it into Munki. Set ARCH to arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.ScreenStudio
+ParentRecipe: com.github.kevinmcox.download.ScreenStudio
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: ScreenStudio
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: "Screen Studio/%ARCH%"
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Productivity
+    description: macOS screen recorder with automatic zoom and smooth animations for product demos, tutorials, and social media videos.
+    developer: Adam Pietrasiak
+    display_name: Screen Studio
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"

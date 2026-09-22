@@ -1,0 +1,10 @@
+Description: Downloads, packages and installs the latest version of bazelisk (https://github.com/bazelbuild/bazelisk).
+Identifier: com.github.kevinmcox.install.bazelisk
+ParentRecipe: com.github.kevinmcox.pkg.bazelisk
+MinimumVersion: '2.9.0'
+
+Input:
+  NAME: bazelisk
+
+Process:
+  - Processor: Installer

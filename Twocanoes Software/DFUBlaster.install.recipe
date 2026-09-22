@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Downloads, packages and installs the latest version of DFU Blaster Pro (https://twocanoes.com/products/mac/dfu-blaster/). Parents onto mlbz521-recipes' pkg, which flattens the vendor pkg out of the downloaded disk image.</string>
+	<string>Installs the latest version of DFU Blaster.</string>
 	<key>Identifier</key>
 	<string>com.github.kevinmcox.install.DFUBlaster</string>
 	<key>Input</key>
@@ -12,14 +12,19 @@
 		<string>DFUBlaster</string>
 	</dict>
 	<key>MinimumVersion</key>
-	<string>2.3</string>
+	<string>2.7.2</string>
 	<key>ParentRecipe</key>
-	<string>com.github.mlbz521.pkg.DFUBlaster</string>
+	<string>com.github.kevinmcox.download.DFUBlaster</string>
 	<key>Process</key>
 	<array>
 		<dict>
 			<key>Processor</key>
 			<string>Installer</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%/DFU Blaster Pro.pkg</string>
+			</dict>
 		</dict>
 	</array>
 </dict>

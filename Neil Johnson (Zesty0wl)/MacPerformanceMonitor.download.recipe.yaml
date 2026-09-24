@@ -1,0 +1,28 @@
+Description: Downloads the latest version of Mac Performance Monitor (https://github.com/Zesty0wl/mac-performance-monitor).
+Identifier: com.github.kevinmcox.download.MacPerformanceMonitor
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: MacPerformanceMonitor
+  INCLUDE_PRERELEASES: ""
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      github_repo: Zesty0wl/mac-performance-monitor
+      asset_regex: ^.*\.pkg$
+      include_prereleases: "%INCLUDE_PRERELEASES%"
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - "Developer ID Installer: Neil Johnson (8352865GK4)"
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: "%pathname%"

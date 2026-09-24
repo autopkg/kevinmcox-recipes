@@ -125,6 +125,9 @@ This recipe requires a pre-downloaded package, and a version number, to be passe
 * [Archaeology](https://www.mothersruin.com/software/Archaeology/)
 * [Apparency](https://mothersruin.com/software/Apparency/)
 
+### Neil Johnson (Zesty0wl)
+* [Mac Performance Monitor](https://github.com/Zesty0wl/mac-performance-monitor)
+
 ### Okta
 * [okta-aws-cli](https://github.com/okta/okta-aws-cli)
 

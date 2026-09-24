@@ -1,0 +1,55 @@
+Description: Downloads the latest version of Mac Performance Monitor (https://github.com/Zesty0wl/mac-performance-monitor) and imports it into Munki.
+Identifier: com.github.kevinmcox.munki.MacPerformanceMonitor
+ParentRecipe: com.github.kevinmcox.download.MacPerformanceMonitor
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: MacPerformanceMonitor
+  MUNKI_REPO_SUBDIR: MacPerformanceMonitor
+
+  pkginfo:
+    catalogs:
+      - testing
+    category: Utilities
+    description: "A diagnostic performance logging utility for macOS: logs CPU, memory, GPU, network, and battery from the menu bar to help detect and diagnose performance issues. Free, open source, no telemetry."
+    developer: Neil Johnson
+    display_name: Mac Performance Monitor
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    supported_architectures:
+      - arm64
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      purge_destination: true
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/unpack/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/payload/Applications"
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      derive_minimum_os_version: true
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      installs_item_paths:
+        - /Applications/Mac Performance Monitor.app
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/unpack"
+        - "%RECIPE_CACHE_DIR%/payload"

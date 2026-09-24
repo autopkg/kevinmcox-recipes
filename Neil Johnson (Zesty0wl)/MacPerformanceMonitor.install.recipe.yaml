@@ -1,0 +1,11 @@
+Description: Downloads and installs the latest version of Mac Performance Monitor (https://github.com/Zesty0wl/mac-performance-monitor).
+Identifier: com.github.kevinmcox.install.MacPerformanceMonitor
+ParentRecipe: com.github.kevinmcox.download.MacPerformanceMonitor
+MinimumVersion: "2.9.0"
+
+Input:
+  NAME: MacPerformanceMonitor
+  pkg_path: "%pathname%"
+
+Process:
+  - Processor: Installer

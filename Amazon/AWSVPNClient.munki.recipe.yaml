@@ -1,0 +1,68 @@
+Description: Downloads the latest version of AWS VPN Client and imports it into Munki. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.munki.AWSVPNClient
+ParentRecipe: com.github.kevinmcox.download.AWSVPNClient
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: AWSVPNClient
+  ARCH: arm64
+  MUNKI_REPO_SUBDIR: Amazon/AWSVPN/%ARCH%
+
+  pkginfo:
+    blocking_applications:
+      - AWS VPN Client.app
+      - Uninstall AWS VPN Client.app
+    catalogs:
+      - testing
+    category: Utilities
+    description: AWS Client VPN is a managed client-based VPN service that enables you to securely access your AWS resources and resources in your on-premises network. With Client VPN, you can access your resources from any location using an OpenVPN-based VPN client.
+    developer: Amazon Web Services
+    display_name: AWS VPN Client
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      flat_pkg_path: "%pathname%"
+      purge_destination: true
+
+  - Processor: FileFinder
+    Arguments:
+      pattern: "%RECIPE_CACHE_DIR%/unpack/*.pkg/[Pp]ayload"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      destination_path: "%RECIPE_CACHE_DIR%/payload"
+      pkg_payload_path: "%found_filename%"
+      purge_destination: true
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/payload/Applications/AWS VPN Client/AWS VPN Client.app/Contents/Info.plist"
+      plist_version_key: CFBundleShortVersionString
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      derive_minimum_os_version: true
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      installs_item_paths:
+        - /Applications/AWS VPN Client/AWS VPN Client.app
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/payload"
+        - "%RECIPE_CACHE_DIR%/unpack"

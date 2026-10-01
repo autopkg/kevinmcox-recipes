@@ -1,0 +1,42 @@
+Description: Downloads the latest version of AWS VPN Client. Set ARCH to either arm64 or x86_64.
+Identifier: com.github.kevinmcox.download.AWSVPNClient
+MinimumVersion: 2.7.6
+
+Input:
+  NAME: AWSVPNClient
+  ARCH: arm64
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      input_string: "%ARCH%"
+      find: arm64
+      replace: _ARM64
+
+  - Processor: FindAndReplace
+    Arguments:
+      input_string: "%output_string%"
+      find: x86_64
+      replace: ""
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLTextSearcher
+    Arguments:
+      url: https://docs.aws.amazon.com/vpn/latest/clientvpn-user/client-vpn-connect-macos-release-notes.html
+      re_pattern: https://.*?\.cloudfront\.net/OSX%DOWNLOAD_ARCH%/.*?/AWS_VPN_Client%DOWNLOAD_ARCH%\.pkg
+      result_output_var_name: url
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%ARCH%.pkg"
+      url: "%url%"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - "Developer ID Installer: AMZN Mobile LLC (94KV3E626L)"
+        - Developer ID Certification Authority
+        - Apple Root CA
+      input_path: "%pathname%"

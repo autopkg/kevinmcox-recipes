@@ -16,6 +16,7 @@ Recipes for use with [AutoPkg](https://github.com/autopkg/autopkg), including th
 
 ### Amazon Web Services
 * [Amazon ECR Docker Credential Helper](https://github.com/awslabs/amazon-ecr-credential-helper)
+* [AWS VPN Client](https://aws.amazon.com/vpn)
 
 ### Anthropic PBC
 * [Claude Desktop](https://claude.com/download)

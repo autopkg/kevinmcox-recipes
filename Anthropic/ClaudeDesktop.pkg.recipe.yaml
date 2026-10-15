@@ -8,13 +8,13 @@ Input:
 Process:
   - Processor: URLTextSearcher
     Arguments:
-      re_pattern: https?://downloads\.claude\.ai/releases/darwin/universal/[0-9]+(?:\.[0-9]+)*/Claude-[a-f0-9]{40}(?=\.zip)
+      re_pattern: (?P<url>https?://downloads\.claude\.ai/releases/darwin/universal/(?P<version>[0-9]+(?:\.[0-9]+)*)/Claude-[a-f0-9]{40}(?=\.zip))
       url: https://downloads.claude.ai/releases/darwin/universal/RELEASES.json
 
   - Processor: URLDownloader
     Arguments:
       filename: "%NAME%.pkg"
-      url: "%match%.pkg"
+      url: "%url%.pkg"
 
   - Processor: EndOfCheckPhase
 

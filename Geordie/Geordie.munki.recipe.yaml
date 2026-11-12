@@ -29,6 +29,8 @@ Input:
       KEYCHAIN_SERVICE="geordie-api-$INSTANCE_NAME"
       BINARY_EXECUTABLE="geordie-endpoint-scanner"
 
+      MACHINE_ID="${MACHINE_ID:-$(/usr/sbin/scutil --get ComputerName 2>/dev/null || hostname)}"
+
       store_credentials() {
         echo "Storing API credentials in System keychain..."
         KEYCHAIN_PATH="/Library/Keychains/System.keychain"
@@ -59,6 +61,7 @@ Input:
           echo "ERROR: binary not found"
           exit 1
         fi
+        echo "Using machine ID: ${MACHINE_ID}"
         cat > "$PLIST_PATH" <<PLISTEOF
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -73,6 +76,8 @@ Input:
           <string>--instance</string>
           <string>%GEORDIE_INSTANCE_NAME%</string>
           <string>--unattended</string>
+          <string>--machine-id</string>
+          <string>${MACHINE_ID}</string>
         </array>
         <key>StartInterval</key><integer>300</integer>
         <key>RunAtLoad</key><true/>
@@ -112,6 +117,7 @@ Input:
       PLIST_PATH="/Library/LaunchAgents/${LABEL}.plist"
       KEYCHAIN_PATH="/Library/Keychains/System.keychain"
       AGENT_USER="geordie"
+      BINARY_PATH="/opt/geordie/bin/geordie-endpoint-scanner"
 
       echo "Starting Geordie uninstall for instance '${INSTANCE_NAME}'..."
 
@@ -133,14 +139,23 @@ Input:
       /bin/rm -f "$PLIST_PATH" || true
 
       echo "Removing binaries and support files..."
-      /bin/rm -rf /opt/geordie || true
+      /usr/bin/chflags -R nouchg,noschg /opt/geordie 2>/dev/null || true
+      /bin/chmod -RN /opt/geordie 2>/dev/null || true
+      /bin/rm -rf /opt/geordie
+
+      if [ -e "$BINARY_PATH" ]; then
+      	echo "ERROR: ${BINARY_PATH} still present after removal attempt."
+      	exit 1
+      fi
 
       echo "Removing keychain entry for instance '${INSTANCE_NAME}'..."
       /usr/bin/security delete-generic-password -a "$AGENT_USER" -s "geordie-api-${INSTANCE_NAME}" "$KEYCHAIN_PATH" 2>/dev/null || true
 
+      echo "Forgetting package receipt..."
+      /usr/sbin/pkgutil --forget ai.geordie.cli 2>/dev/null || true
+
       echo "Uninstallation complete."
       exit 0
-
     version_script: |
       #!/bin/sh
       /opt/geordie/bin/geordie-endpoint-scanner --version | /usr/bin/grep -Eo 'geordie-cli/[0-9]+\.[0-9]+\.[0-9]+' | /usr/bin/cut -d/ -f2
@@ -151,6 +166,58 @@ Process:
       destination_path: "%RECIPE_CACHE_DIR%/unpack"
       flat_pkg_path: "%pathname%"
       purge_destination: true
+
+  - Processor: URLTextSearcher
+    Arguments:
+      url: "file://%RECIPE_CACHE_DIR%/unpack/PackageInfo"
+      re_pattern: '<pkg-info[^>]*\sversion="([^"]+)"'
+      result_output_var_name: geordie_version
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        installcheck_script: |
+          #!/bin/zsh --no-rcs
+
+          autoload -Uz is-at-least
+
+          REQUIRED_VERSION="%geordie_version%"
+          BINARY_PATH="/opt/geordie/bin/geordie-endpoint-scanner"
+          LABEL="ai.geordie.endpoint-scanner"
+          PLIST_PATH="/Library/LaunchAgents/${LABEL}.plist"
+
+          # Make sure the binary and LaunchAgent are installed
+          if [ ! -x "$BINARY_PATH" ]; then
+              exit 0
+          elif [ ! -f "$PLIST_PATH" ]; then
+              exit 0
+          fi
+
+          # Determine the currently installed version
+          INSTALLED_VERSION=$("$BINARY_PATH" --version 2>/dev/null | /usr/bin/grep -Eo 'geordie-cli/[0-9]+\.[0-9]+\.[0-9]+' | /usr/bin/cut -d/ -f2)
+
+          # With an empty version, is-at-least compares against zsh's own version (5.x), which would always pass, so check for empty first.
+          # A version newer than REQUIRED_VERSION counts as installed.
+          if [ -z "$INSTALLED_VERSION" ]; then
+            exit 0
+          elif ! is-at-least "$REQUIRED_VERSION" "$INSTALLED_VERSION"; then
+            exit 0
+          fi
+
+          # The LaunchAgent loads per-user, so with no console user there is nothing to check.
+          CONSOLE_USER=$(/usr/bin/stat -f%Su /dev/console 2>/dev/null)
+          if [ -z "$CONSOLE_USER" ] || [ "$CONSOLE_USER" = "root" ]; then
+            exit 1
+          fi
+
+          CONSOLE_UID=$(/usr/bin/id -u "$CONSOLE_USER" 2>/dev/null)
+          if [ -z "$CONSOLE_UID" ]; then
+            exit 1
+          elif /bin/launchctl print "gui/${CONSOLE_UID}/${LABEL}" >/dev/null 2>&1; then
+            exit 1
+          else
+            exit 0
+          fi
 
   - Processor: PkgPayloadUnpacker
     Arguments:

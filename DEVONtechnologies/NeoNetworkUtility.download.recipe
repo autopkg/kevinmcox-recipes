@@ -21,9 +21,9 @@
 			<key>Arguments</key>
 			<dict>
 				<key>url</key>
-				<string>https://www.devontechnologies.com/apps/freeware</string>
+				<string>https://www.devontechnologies.com/apps/freeware/networkutility</string>
 				<key>re_pattern</key>
-				<string>'(https://.*Neo_Network_Utility\.dmg\.zip)'</string>
+				<string>https://download\.devontechnologies\.com/download/freeware/networkutility/\d+(?:\.\d+)*/Neo_Network_Utility\.dmg\.zip</string>
 			</dict>
 		</dict>
 		<dict>

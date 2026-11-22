@@ -1,18 +1,38 @@
-Description: Downloads the latest version of Bazelisk (https://github.com/bazelbuild/bazelisk).
+Description: Downloads the latest version of Bazelisk (https://github.com/bazelbuild/bazelisk). Set ARCH to either universal, arm64 or x86_64.
 Identifier: com.github.kevinmcox.download.bazelisk
 MinimumVersion: "2.9.0"
 
 Input:
   NAME: bazelisk
+  ARCH: arm64
 
 Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: "universal"
+      input_string: "%ARCH%"
+      replace: ""
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "arm64"
+      input_string: "%output_string%"
+      replace: "-arm64"
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "x86_64"
+      input_string: "%output_string%"
+      replace: "-amd64"
+      result_output_var_name: "DOWNLOAD_ARCH"
+
   - Processor: GitHubReleasesInfoProvider
     Arguments:
       github_repo: bazelbuild/bazelisk
-      asset_regex: ^bazelisk-darwin$
+      asset_regex: ^bazelisk-darwin%DOWNLOAD_ARCH%$
 
   - Processor: URLDownloader
     Arguments:
-      filename: "%NAME%"
+      filename: "%NAME%-%ARCH%"
 
   - Processor: EndOfCheckPhase

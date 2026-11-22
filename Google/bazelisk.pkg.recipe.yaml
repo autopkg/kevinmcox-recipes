@@ -22,7 +22,7 @@ Process:
     Arguments:
       pkg_request:
         pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
-        pkgname: "%NAME%-%version%"
+        pkgname: "%NAME%-%ARCH%-%version%"
         id: com.github.bazelbuild.bazelisk
         version: "%version%"
         chown:

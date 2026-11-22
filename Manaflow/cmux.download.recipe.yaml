@@ -1,19 +1,39 @@
-Description: Downloads the latest version of cmux from Github.
+Description: Downloads the latest version of cmux from Github. Set ARCH to either universal, arm64 or x86_64.
 Identifier: com.github.kevinmcox.download.cmux
 MinimumVersion: "2.9.0"
 
 Input:
   NAME: cmux
+  ARCH: arm64
 
 Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: "universal"
+      input_string: "%ARCH%"
+      replace: ""
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "arm64"
+      input_string: "%output_string%"
+      replace: "-arm64"
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "x86_64"
+      input_string: "%output_string%"
+      replace: "-x86_64"
+      result_output_var_name: "DOWNLOAD_ARCH"
+
   - Processor: GitHubReleasesInfoProvider
     Arguments:
-      asset_regex: 'cmux-macos.dmg'
+      asset_regex: '^cmux-macos%DOWNLOAD_ARCH%\.dmg$'
       github_repo: manaflow-ai/cmux
 
   - Processor: URLDownloader
     Arguments:
-      filename: "cmux-%version%.dmg"
+      filename: "%NAME%-%ARCH%-%version%.dmg"
 
   - Processor: EndOfCheckPhase
 

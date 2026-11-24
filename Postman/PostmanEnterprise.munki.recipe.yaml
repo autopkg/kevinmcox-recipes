@@ -51,6 +51,29 @@ Process:
 
   - Processor: MunkiPkginfoMerger
 
+  # The app version e.g. "11.112.2-enterprise01", which isn't a valid PEP 440
+  # version and breaks tools like Gusto's autopromote script. Set the top-level pkginfo
+  # version to "11.112.2.01" instead. The installs entry keeps the app's real
+  # version string so Munki's installed check still matches the bundle.
+  # Similar pattern to what Spotify used to require.
+  - Processor: PlistReader
+    Arguments:
+      info_path: "%RECIPE_CACHE_DIR%/payload/Applications/Postman Enterprise.app/Contents/Info.plist"
+      plist_keys:
+        CFBundleShortVersionString: version
+
+  - Processor: FindAndReplace
+    Arguments:
+      find: "-enterprise"
+      input_string: "%version%"
+      replace: "."
+      result_output_var_name: version
+
+  - Processor: MunkiPkginfoMerger
+    Arguments:
+      additional_pkginfo:
+        version: "%version%"
+
   - Processor: MunkiImporter
     Arguments:
       pkg_path: "%pathname%"

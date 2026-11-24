@@ -1,0 +1,63 @@
+Description: 'Downloads the Postman Enterprise pkg and imports it into Munki. Set ARCH to "arm64" or "x86_64". Set MAJOR_VERSION to match your console.'
+Identifier: com.github.kevinmcox.munki.PostmanEnterprise
+ParentRecipe: com.github.kevinmcox.download.PostmanEnterprise
+MinimumVersion: '3.0.0'
+
+Input:
+  NAME: PostmanEnterprise
+  ARCH: arm64
+  MAJOR_VERSION: '11'
+  MUNKI_REPO_SUBDIR: Postman/%ARCH%
+
+  pkginfo:
+    blocking_applications:
+      - Postman Enterprise.app
+    catalogs:
+      - testing
+    category: Developer Tools
+    description: Postman Enterprise is the admin-managed build of Postman for building, testing and documenting APIs.
+    developer: Postdot Technologies, Inc.
+    display_name: Postman Enterprise
+    icon_name: "%NAME%.png"
+    name: "%NAME%"
+    supported_architectures:
+      - "%ARCH%"
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+      flat_pkg_path: "%pathname%"
+      purge_destination: true
+
+  - Processor: FileFinder
+    Arguments:
+      pattern: "%RECIPE_CACHE_DIR%/unpack/*.pkg/[Pp]ayload"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      destination_path: "%RECIPE_CACHE_DIR%/payload"
+      pkg_payload_path: "%found_filename%"
+      purge_destination: true
+
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      derive_minimum_os_version: true
+      faux_root: "%RECIPE_CACHE_DIR%/payload"
+      installs_item_paths:
+        - /Applications/Postman Enterprise.app
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: "%pathname%"
+      repo_subdirectory: "%MUNKI_REPO_SUBDIR%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/payload"
+        - "%RECIPE_CACHE_DIR%/unpack"

@@ -1,0 +1,31 @@
+Description: 'Downloads the Postman Enterprise pkg. Set ARCH to "arm64" or "x86_64". Set MAJOR_VERSION to match your console.'
+Identifier: com.github.kevinmcox.download.PostmanEnterprise
+MinimumVersion: '3.0.0'
+
+Input:
+  NAME: PostmanEnterprise
+  ARCH: arm64
+  MAJOR_VERSION: '11'
+
+Process:
+  - Processor: FindAndReplace
+    Arguments:
+      find: x86_64
+      input_string: "%ARCH%"
+      replace: '64'
+      result_output_var_name: DOWNLOAD_ARCH
+
+  - Processor: URLDownloader
+    Arguments:
+      filename: "%NAME%-%ARCH%.pkg"
+      url: https://dl.pstmn.io/download/latest/version/%MAJOR_VERSION%/osx_%DOWNLOAD_ARCH%?channel=enterprise&filetype=pkg
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      expected_authority_names:
+        - "Developer ID Installer: Postdot Technologies, Inc (H7H8Q7M5CK)"
+        - Developer ID Certification Authority
+        - Apple Root CA
